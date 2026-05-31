@@ -8,14 +8,16 @@ import {
   PieChart, Pie, Cell, BarChart, Bar 
 } from 'recharts';
 import { Users, Camera, Activity } from 'lucide-react';
-import { BiodiversityPanel } from './BiodiversityPanel';
-import { SeasonalDistributionChart } from './SeasonalDistributionChart';
-import { RelativeAbundanceChart } from './RelativeAbundanceChart';
-import { TrophicGuildChart } from './TrophicGuildChart';
-import { ActivityPatternChart } from './ActivityPatternChart';
-import { HabitatOccupancyChart } from './HabitatOccupancyChart';
-import { TemperatureCorrelationChart } from './TemperatureCorrelationChart';
-import { PreyAbundanceChart } from './PreyAbundanceChart';
+import { DiversityChart } from './DiversityChart';
+import { RaiMonthlyChart } from './RaiMonthlyChart';
+import { RaiChart } from './RaiChart';
+import { ActivityWeckelChart } from './ActivityWeckelChart';
+import { OcupacionChart } from './OcupacionChart';
+import { TemperaturaChart } from './TemperaturaChart';
+import { EventosIndependientesChart } from './EventosIndependientesChart';
+import { MapaCalorChart } from './MapaCalorChart';
+import { GremiosChart } from './GremiosChart';
+import { FrequencyChart } from './FrequencyChart';
 
 const COLORS = ['#eab308', '#f97316', '#3b82f6', '#22c55e', '#a855f7', '#ef4444', '#14b8a6'];
 
@@ -195,69 +197,101 @@ export const CustomReportModal = () => {
         {/* Columnas Derecha: Gráficas */}
         <div className="w-full xl:w-2/3 flex flex-col gap-4 pb-8">
           
-          {/* Fila 1: Índice de Biodiversidad (Full Width Top) */}
+          {/* Fila 1: Índice de Biodiversidad / Diversidad (real backend) */}
           {reportFilters?.activeCharts?.includes('biodiversity') && (
-            <div className="w-full">
-              <BiodiversityPanel sightings={capturedSightings} />
-            </div>
+            <DiversityChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
 
-          {/* Fila 2: Distribución Estacional (Full Width) */}
+          {/* RAI Mensual */}
           {reportFilters?.activeCharts?.includes('seasonal') && (
-            <div className="w-full">
-              <SeasonalDistributionChart defaultSpecies="taitetu" />
-            </div>
+            <RaiMonthlyChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
 
-          {/* Fila 2.5: Abundancia Relativa RAI (Full Width) */}
+          {/* RAI Global */}
           {reportFilters?.activeCharts?.includes('rai') && (
-            <div className="w-full">
-              <RelativeAbundanceChart />
-            </div>
+            <RaiChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
 
-          {/* Fila 2.80: Patrón de Actividad (Full Width) */}
+          {/* Patrón de Actividad Weckel */}
           {reportFilters?.activeCharts?.includes('activity') && (
-            <div className="w-full">
-              <ActivityPatternChart />
-            </div>
+            <ActivityWeckelChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
 
-          {/* Fila 2.82: Ocupación del Hábitat (Full Width) */}
+          {/* Ocupación */}
           {reportFilters?.activeCharts?.includes('occupancy') && (
-            <div className="w-full">
-              <HabitatOccupancyChart />
-            </div>
+            <OcupacionChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
 
-          {/* Fila 2.84: Temperatura vs Actividad (Full Width) */}
+          {/* Temperatura */}
           {reportFilters?.activeCharts?.includes('temperature') && (
-            <div className="w-full">
-              <TemperatureCorrelationChart />
-            </div>
+            <TemperaturaChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
 
-          {/* Fila 2.85: Abundancia de Presas (Full Width) */}
+          {/* Eventos Independientes */}
           {reportFilters?.activeCharts?.includes('prey') && (
-            <div className="w-full">
-              <PreyAbundanceChart />
-            </div>
+            <EventosIndependientesChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
 
-          {/* Fila 2.85: Gremios Tróficos (Full Width) */}
+          {/* Mapa de Calor */}
+          {reportFilters?.activeCharts?.includes('mapaCalor') && (
+            <MapaCalorChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
+          )}
+
+          {/* Gremios Tróficos */}
           {reportFilters?.activeCharts?.includes('trophic') && (
-            <div className="w-full">
-              <TrophicGuildChart />
-            </div>
+            <GremiosChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
           )}
           
-          {/* Fila 3: Linea de Tiempo y Frecuencia Horizontal */}
-          <div className="flex flex-col xl:flex-row gap-4 w-full">
-            {/* Grafica de Area */}
-            {reportFilters?.activeCharts?.includes('timeline') && (
-            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
+          {/* Fila 3: Línea de Tiempo */}
+          {reportFilters?.activeCharts?.includes('timeline') && (
+            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 w-full flex flex-col" style={{ minHeight: '260px' }}>
               <h3 className="text-xs font-bold text-white mb-1">Línea de Tiempo de Detecciones</h3>
-              <div className="w-full" style={{ minHeight: '220px', height: '100%' }}>
+              <div className="w-full flex-1" style={{ minHeight: '220px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={timelineData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
@@ -275,29 +309,17 @@ export const CustomReportModal = () => {
                 </ResponsiveContainer>
               </div>
             </div>
-            )}
+          )}
 
-            {/* Gráfica de Barras Horizontales (Frecuencia %) */}
-            {reportFilters?.activeCharts?.includes('frequency') && (
-            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
-              <h3 className="text-xs font-bold text-white mb-1">Frecuencia por Animal (%)</h3>
-              <div className="w-full" style={{ height: Math.max(220, frequencyData?.length * 35) }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={frequencyData} layout="vertical" margin={{ top: 0, right: 30, left: 30, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" horizontal={true} vertical={false}/>
-                    <XAxis type="number" stroke="#ffffff80" fontSize={8} domain={[0, 100]} tickFormatter={(val) => `${val}%`} />
-                    <YAxis dataKey="name" type="category" stroke="#ffffff" fontSize={9} width={100} tickLine={false} axisLine={false} interval={0} />
-                    <Tooltip 
-                      formatter={(value) => [`${value}%`, 'Frecuencia']}
-                      contentStyle={{ backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                    />
-                    <Bar dataKey="porcentaje" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={24} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-            )}
-          </div>
+          {/* Fila 4: Frecuencia de Avistamiento por Especie (real backend) */}
+          {reportFilters?.activeCharts?.includes('frequency') && (
+            <FrequencyChart
+              stationIds={selectedCameraIds}
+              startDate={reportFilters?.startDate || null}
+              endDate={reportFilters?.endDate || null}
+              projectId={null}
+            />
+          )}
 
         </div>
       </div>

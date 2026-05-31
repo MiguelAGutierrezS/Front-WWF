@@ -10,7 +10,7 @@ export const useMapStore = create((set) => ({
     startDate: null,
     endDate: null,
     excludedSpecies: [],
-    activeCharts: ['biodiversity', 'seasonal', 'accumulation', 'activity', 'occupancy', 'temperature', 'prey', 'rai', 'trophic', 'timeline', 'frequency', 'pie'],
+    activeCharts: ['biodiversity', 'seasonal', 'accumulation', 'activity', 'occupancy', 'temperature', 'prey', 'rai', 'trophic', 'timeline', 'frequency', 'pie', 'mapaCalor'],
     activePeriods: ['Mañana', 'Tarde', 'Noche'],
     tempMin: '',
     tempMax: ''
@@ -32,7 +32,7 @@ export const useMapStore = create((set) => ({
       startDate: null,
       endDate: null,
       excludedSpecies: [],
-      activeCharts: ['biodiversity', 'seasonal', 'accumulation', 'activity', 'occupancy', 'temperature', 'prey', 'rai', 'trophic', 'timeline', 'frequency', 'pie'],
+      activeCharts: ['biodiversity', 'seasonal', 'accumulation', 'activity', 'occupancy', 'temperature', 'prey', 'rai', 'trophic', 'timeline', 'frequency', 'pie', 'mapaCalor'],
       activePeriods: ['Mañana', 'Tarde', 'Noche'],
       tempMin: '',
       tempMax: ''

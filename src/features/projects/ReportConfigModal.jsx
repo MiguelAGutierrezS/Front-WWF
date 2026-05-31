@@ -107,15 +107,16 @@ export const ReportConfigModal = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { id: 'biodiversity', label: 'Índice de Biodiversidad' },
-              { id: 'seasonal', label: 'Distribución Estacional' },
-              { id: 'activity', label: 'Patrón de Actividad Diaria' },
-              { id: 'occupancy', label: 'Ocupación del Hábitat (Psi)' },
-              { id: 'temperature', label: 'Temperatura vs Actividad' },
-              { id: 'prey', label: 'Abundancia de Presas' },
+              { id: 'seasonal', label: 'RAI Mensual' },
+              { id: 'activity', label: 'Patrón de Actividad (Weckel)' },
+              { id: 'occupancy', label: 'Ocupación por Estación' },
+              { id: 'temperature', label: 'Temperatura vs Detección' },
+              { id: 'prey', label: 'Eventos Independientes' },
               { id: 'rai', label: 'Abundancia Relativa (RAI)' },
               { id: 'trophic', label: 'Gremios Tróficos' },
               { id: 'timeline', label: 'Línea de Tiempo' },
-              { id: 'frequency', label: 'Frecuencia Horizontal' }
+              { id: 'frequency', label: 'Frecuencia por Especie' },
+              { id: 'mapaCalor', label: 'Mapa de Calor Horario' },
             ].map(chart => (
               <label key={chart.id} className={`flex items-center p-3 rounded-xl border cursor-pointer transition-all duration-300 hover:scale-[1.03] ${localActiveCharts.includes(chart.id) ? 'bg-white border-white text-black' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-[#1a1a1a]'}`}>
                 <input 
