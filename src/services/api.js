@@ -182,3 +182,26 @@ export const getCameraStations = async ({ skip = 0, limit = 100 } = {}) => {
   return data;
 };
 
+/** GET /projects/
+ *  Response: Array of project objects
+ */
+export const getProjects = async ({ skip = 0, limit = 100 } = {}) => {
+  const { data } = await apiClient.get(`/projects/?skip=${skip}&limit=${limit}`);
+  return data;
+};
+
+/** GET /users/
+ *  Response: Array of user objects
+ */
+export const getUsers = async ({ skip = 0, limit = 100 } = {}) => {
+  const { data } = await apiClient.get(`/users/?skip=${skip}&limit=${limit}`);
+  return data;
+};
+
+/** GET /species/
+ *  Response: Array of species detection objects
+ */
+export const getSpecies = async ({ skip = 0, limit = 1000 } = {}) => {
+  const { data } = await apiClient.get(`/species/?skip=${skip}&limit=${limit}`);
+  return data;
+};

@@ -2,8 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { APIProvider, Map, AdvancedMarker, useMap } from '@vis.gl/react-google-maps';
 import { useMapStore } from '../../store/useMapStore';
 import { useModalStore } from '../../store/useModalStore';
-import { getCameraStations } from '../../services/api';
-import { species } from '../../data/mockDatabase';
+import { getCameraStations, getProjects, getUsers, getSpecies } from '../../services/api';
 import { MapSelectionLayer } from './MapSelectionLayer';
 import { AreaActionPopup } from './AreaActionPopup';
 import { ScanEye } from 'lucide-react';
@@ -36,26 +35,42 @@ export const FullScreenMap = () => {
   const selectedCameraIds = useMapStore((state) => state.selectedCameraIds);
   const cameraStations = useMapStore((state) => state.cameraStations);
   const setCameraStations = useMapStore((state) => state.setCameraStations);
+  
+  const setProjects = useMapStore((state) => state.setProjects);
+  const setUsers = useMapStore((state) => state.setUsers);
+  const species = useMapStore((state) => state.species);
+  const setSpecies = useMapStore((state) => state.setSpecies);
+  
   const globalCameraFilters = useMapStore((state) => state.globalCameraFilters);
   const openModal = useModalStore((state) => state.openModal);
 
-  // Fetch camera stations from endpoint
+  // Fetch all live data from endpoint
   useEffect(() => {
-    const loadStations = async () => {
+    const loadAllData = async () => {
       try {
-        const data = await getCameraStations({ skip: 0, limit: 100 });
-        const parsed = data.map(s => ({
+        const [camsData, projectsData, usersData, speciesData] = await Promise.all([
+          getCameraStations({ skip: 0, limit: 100 }).catch(e => { console.error('Cams failed', e); return []; }),
+          getProjects({ skip: 0, limit: 100 }).catch(e => { console.error('Projects failed', e); return []; }),
+          getUsers({ skip: 0, limit: 100 }).catch(e => { console.error('Users failed', e); return []; }),
+          getSpecies({ skip: 0, limit: 1000 }).catch(e => { console.error('Species failed', e); return []; })
+        ]);
+        
+        const parsedCams = camsData.map(s => ({
           ...s,
           latitude: parseFloat(s.latitude),
           longitude: parseFloat(s.longitude)
         }));
-        setCameraStations(parsed);
+        
+        setCameraStations(parsedCams);
+        setProjects(projectsData);
+        setUsers(usersData);
+        setSpecies(speciesData);
       } catch (err) {
-        console.error('Error loading camera stations:', err);
+        console.error('Error loading API data:', err);
       }
     };
-    loadStations();
-  }, [setCameraStations]);
+    loadAllData();
+  }, [setCameraStations, setProjects, setUsers, setSpecies]);
 
   const filteredStations = useMemo(() => {
     return cameraStations.filter(cam => {
@@ -106,7 +121,7 @@ export const FullScreenMap = () => {
       
       return true;
     });
-  }, [cameraStations, globalCameraFilters]);
+  }, [cameraStations, globalCameraFilters, species]);
 
   return (
     <div className="absolute inset-0 z-0 bg-gray-900">

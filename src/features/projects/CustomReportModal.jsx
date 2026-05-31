@@ -77,9 +77,9 @@ export const CustomReportModal = () => {
 
     // Determinar qué proyectos y qué usuarios están implicados (Créditos)
     const involvedProjectIds = [...new Set(selectedCameras.map(c => c.project_id))];
-    const involvedProjects = projects.filter(p => involvedProjectIds.includes(p.id));
-    const involvedUserIds = [...new Set(involvedProjects.map(p => p.user_id))];
-    const creditedInvestigators = users.filter(u => involvedUserIds.includes(u.id));
+    const selectedProjects = projects.filter(p => involvedProjectIds.includes(p.id));
+    const uniqueUsers = [...new Set(selectedProjects.map(p => p.user_id))];
+    const creditedInvestigators = users.filter(u => uniqueUsers.includes(u.id));
 
     // 1. Agrupar por especie (Pie Chart)
     const speciesCounts = {};
@@ -120,7 +120,7 @@ export const CustomReportModal = () => {
       frequencyData,
       creditedInvestigators
     };
-  }, [selectedCameraIds, reportFilters]);
+  }, [selectedCameraIds, reportFilters, cameraStations, species, users, projects]);
 
   if (!selectedCameraIds || selectedCameraIds.length === 0) return null;
 

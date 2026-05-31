@@ -3,11 +3,10 @@ import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
 import { Menu, Calendar, ChevronDown, ChevronUp, Info, Filter as FilterIcon } from 'lucide-react';
-import { species } from '../../data/mockDatabase';
 
 export const FilterPanel = () => {
   const { closeModal } = useModalStore();
-  const { globalCameraFilters, setGlobalCameraFilters } = useMapStore();
+  const { globalCameraFilters, setGlobalCameraFilters, species } = useMapStore();
   
   // Local states based on global state
   const [activeTime, setActiveTime] = useState(globalCameraFilters.activeTime || null);
@@ -17,11 +16,11 @@ export const FilterPanel = () => {
   
   const [isSpeciesOpen, setIsSpeciesOpen] = useState(true);
 
-  // Extract unique species from all global mock data
+  // Extract unique species from all live data
   const uniqueSpecies = useMemo(() => {
     const names = [...new Set(species.map(s => s.common_name))];
     return names.sort();
-  }, []);
+  }, [species]);
 
   const handleTimePreset = (time) => {
     if (activeTime === time) {

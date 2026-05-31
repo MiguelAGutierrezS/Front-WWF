@@ -1,12 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
-import { projects, users, species } from '../../data/mockDatabase';
+import { useMapStore } from '../../store/useMapStore';
 import { ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar } from 'recharts';
 
 export const CameraDataModal = () => {
   const { modalData, closeModal } = useModalStore();
+  const projects = useMapStore((state) => state.projects);
+  const users = useMapStore((state) => state.users);
+  const species = useMapStore((state) => state.species);
+  
   const [isInfoOpen, setIsInfoOpen] = useState(true);
   const [isTableOpen, setIsTableOpen] = useState(false);
 
@@ -31,7 +35,7 @@ export const CameraDataModal = () => {
       .sort((a, b) => b.value - a.value);
 
     return { project, investigator, stationSightings, uniqueSpecies: Object.keys(speciesCounts).length, frequencyData };
-  }, [modalData]);
+  }, [modalData, projects, users, species]);
 
   if (!modalData) return null;
 

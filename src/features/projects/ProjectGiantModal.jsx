@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
-import { users, species } from '../../data/mockDatabase';
 import { 
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, 
   PieChart, Pie, Cell, BarChart, Bar 
@@ -15,6 +14,8 @@ export const ProjectGiantModal = () => {
   const { modalData, openModal, closeModal } = useModalStore();
   const setActiveProject = useMapStore((state) => state.setActiveProject);
   const cameraStations = useMapStore((state) => state.cameraStations);
+  const users = useMapStore((state) => state.users);
+  const species = useMapStore((state) => state.species);
   
   const handleBack = () => {
     openModal('projectList');
@@ -67,7 +68,7 @@ export const ProjectGiantModal = () => {
       }));
 
     return { investigator, projectCameras, projectSightings, speciesData, timelineData, frequencyData };
-  }, [modalData]);
+  }, [modalData, users, cameraStations, species]);
 
   if (!modalData) return null;
 

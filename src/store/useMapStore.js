@@ -4,6 +4,9 @@ export const useMapStore = create((set) => ({
   mode: 'cameras', // 'cameras'
   activeProjectId: null,
   cameraStations: [], // dynamically loaded camera stations
+  projects: [], // dynamically loaded projects
+  users: [], // dynamically loaded users
+  species: [], // dynamically loaded species sightings
   drawingMode: null, // 'circle' | 'rectangle' | null
   selectionShape: null, // the active shape bounds/coords
   selectedCameraIds: [], // cameras captured by the shape
@@ -25,6 +28,9 @@ export const useMapStore = create((set) => ({
   setMode: (mode) => set({ mode }),
   setActiveProject: (projectId) => set({ activeProjectId: projectId }),
   setCameraStations: (stations) => set({ cameraStations: stations }),
+  setProjects: (projects) => set({ projects }),
+  setUsers: (users) => set({ users }),
+  setSpecies: (species) => set({ species }),
   setDrawingMode: (drawingMode) => set({ drawingMode }),
   setSelectionShape: (shape) => set({ selectionShape: shape }),
   setSelectedCameraIds: (ids) => set({ selectedCameraIds: ids }),

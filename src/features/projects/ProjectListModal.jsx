@@ -3,13 +3,15 @@ import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
 import { Button } from '../../components/ui/Button';
-import { projects, users, species } from '../../data/mockDatabase';
 
 export const ProjectListModal = () => {
   const { openModal } = useModalStore();
   const setActiveProject = useMapStore((state) => state.setActiveProject);
   const activeProjectId = useMapStore((state) => state.activeProjectId);
   const cameraStations = useMapStore((state) => state.cameraStations);
+  const projects = useMapStore((state) => state.projects);
+  const users = useMapStore((state) => state.users);
+  const species = useMapStore((state) => state.species);
 
   const handleSelectProject = (id) => {
     setActiveProject(activeProjectId === id ? null : id);
