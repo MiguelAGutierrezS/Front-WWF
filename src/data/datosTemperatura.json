@@ -1,0 +1,9 @@
+[
+  { "fecha": "2025-01-16", "temp_media": 26.5, "detecciones_totales": 5, "jochi_calucha": 3, "guaso": 0, "taitetu": 0 },
+  { "fecha": "2025-01-17", "temp_media": 28.1, "detecciones_totales": 8, "jochi_calucha": 0, "guaso": 0, "taitetu": 0 },
+  { "fecha": "2025-01-18", "temp_media": 28.4, "detecciones_totales": 15, "jochi_calucha": 12, "guaso": 0, "taitetu": 0 },
+  { "fecha": "2025-01-19", "temp_media": 27.6, "detecciones_totales": 13, "jochi_calucha": 5, "guaso": 2, "taitetu": 2 },
+  { "fecha": "2025-01-20", "temp_media": 28.2, "detecciones_totales": 18, "jochi_calucha": 12, "guaso": 0, "taitetu": 3 },
+  { "fecha": "2025-01-21", "temp_media": 25.7, "detecciones_totales": 12, "jochi_calucha": 6, "guaso": 0, "taitetu": 0 },
+  { "fecha": "2025-01-22", "temp_media": 26.3, "detecciones_totales": 27, "jochi_calucha": 13, "guaso": 1, "taitetu": 0 }
+]

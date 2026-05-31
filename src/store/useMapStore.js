@@ -10,7 +10,10 @@ export const useMapStore = create((set) => ({
     startDate: null,
     endDate: null,
     excludedSpecies: [],
-    activeCharts: ['timeline', 'frequency', 'pie', 'biodiversity']
+    activeCharts: ['biodiversity', 'seasonal', 'accumulation', 'activity', 'occupancy', 'temperature', 'prey', 'rai', 'trophic', 'timeline', 'frequency', 'pie'],
+    activePeriods: ['Mañana', 'Tarde', 'Noche'],
+    tempMin: '',
+    tempMax: ''
   },
   globalCameraFilters: {
     activeTime: null,
@@ -29,7 +32,10 @@ export const useMapStore = create((set) => ({
       startDate: null,
       endDate: null,
       excludedSpecies: [],
-      activeCharts: ['timeline', 'frequency', 'pie', 'biodiversity']
+      activeCharts: ['biodiversity', 'seasonal', 'accumulation', 'activity', 'occupancy', 'temperature', 'prey', 'rai', 'trophic', 'timeline', 'frequency', 'pie'],
+      activePeriods: ['Mañana', 'Tarde', 'Noche'],
+      tempMin: '',
+      tempMax: ''
     }
   }),
   setGlobalCameraFilters: (filters) => set({ globalCameraFilters: filters }),

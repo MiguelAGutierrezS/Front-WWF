@@ -1,0 +1,12 @@
+[
+  { "presa": "jochi calucha", "eventos_estadistico": 404, "eventos_bruto": 579 },
+  { "presa": "guaso", "eventos_estadistico": 105, "eventos_bruto": 148 },
+  { "presa": "taitetu", "eventos_estadistico": 62, "eventos_bruto": 126 },
+  { "presa": "tatu", "eventos_estadistico": 72, "eventos_bruto": 81 },
+  { "presa": "tapiti", "eventos_estadistico": 59, "eventos_bruto": 73 },
+  { "presa": "urina", "eventos_estadistico": 10, "eventos_bruto": 16 },
+  { "presa": "capibara", "eventos_estadistico": 6, "eventos_bruto": 7 },
+  { "presa": "anta", "eventos_estadistico": 3, "eventos_bruto": 4 },
+  { "presa": "peji", "eventos_estadistico": 3, "eventos_bruto": 3 },
+  { "presa": "jochi pintado", "eventos_estadistico": 1, "eventos_bruto": 1 }
+]

@@ -45,7 +45,7 @@ export const ProjectListModal = () => {
               onClick={() => !isActive && handleSelectProject(proj.id)}
               className={`p-4 rounded-xl border transition-all duration-300 ${
                 isActive 
-                  ? 'bg-[#002244] border-blue-500 cursor-default scale-[1.02] shadow-lg' 
+                  ? 'bg-white/10 border-white/40 cursor-default scale-[1.02] shadow-lg' 
                   : 'bg-white/5 border-white/10 hover:bg-[#1a1a1a] hover:scale-[1.02] cursor-pointer'
               }`}
             >
@@ -67,11 +67,11 @@ export const ProjectListModal = () => {
                     <li><strong className="text-white/80">Investigador Principal:</strong> {investigator?.full_name}</li>
                   </ul>
                   
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 mb-8">
                     <Button variant="secondary" onClick={() => handleSelectProject(proj.id)} className="flex-1 cursor-pointer py-3 text-lg transition-all duration-300 hover:scale-105 hover:bg-white/10">
                       Atrás
                     </Button>
-                    <Button variant="primary" onClick={() => handleViewMore(proj)} className="flex-1 cursor-pointer py-3 bg-blue-600 hover:bg-blue-500 text-white text-lg font-bold shadow-lg transition-all duration-300 hover:scale-105">
+                    <Button variant="primary" onClick={() => handleViewMore(proj)} className="flex-1 cursor-pointer py-3 bg-white hover:bg-gray-200 text-black text-lg font-bold shadow-lg transition-all duration-300 hover:scale-105">
                       Ver reporte completo
                     </Button>
                   </div>

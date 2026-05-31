@@ -121,10 +121,16 @@ const generateMockData = () => {
         status: 'active'
       });
 
-      // Generar avistamientos para esta estación (entre 2 y 20 por cámara para variedad)
       const numSightings = Math.floor(Math.random() * 19) + 2;
       for (let j = 0; j < numSightings; j++) {
         const date = new Date(2026, Math.floor(Math.random() * 6), Math.floor(Math.random() * 28) + 1, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+        
+        const hour = date.getHours();
+        let periodo = 'Noche';
+        if (hour >= 6 && hour < 14) periodo = 'Mañana';
+        else if (hour >= 14 && hour < 20) periodo = 'Tarde';
+        
+        const temperatura = Math.floor(Math.random() * 26) + 15; // 15 to 40
         
         species.push({
           id: uuid(`sp${speciesCounter}`),
@@ -132,6 +138,8 @@ const generateMockData = () => {
           common_name: getRandomAnimal(),
           confidence_score: (Math.random() * 0.2 + 0.8).toFixed(2), // 80% to 100%
           detection_timestamp: date.toISOString(),
+          periodo: periodo,
+          temperatura: temperatura,
           image_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYRM2jpS2-_NuMn1hQoiu6d_CHMCKhQZ6YKw&s'
         });
         speciesCounter++;

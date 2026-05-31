@@ -1,0 +1,39 @@
+{
+  "historial_acumulacion": [
+    { "fecha": "16/01/2025", "especies_nuevas": 4, "acumulado_especies": 4, "nombres_incorporados": "ocelote, tapiti, tatu, zorro" },
+    { "fecha": "17/01/2025", "especies_nuevas": 2, "acumulado_especies": 6, "nombres_incorporados": "jochi calucha, tejon" },
+    { "fecha": "19/01/2025", "especies_nuevas": 2, "acumulado_especies": 8, "nombres_incorporados": "guaso, taitetu" },
+    { "fecha": "21/01/2025", "especies_nuevas": 1, "acumulado_especies": 9, "nombres_incorporados": "oso bandera" },
+    { "fecha": "22/01/2025", "especies_nuevas": 2, "acumulado_especies": 11, "nombres_incorporados": "capibara, urina" },
+    { "fecha": "23/01/2025", "especies_nuevas": 1, "acumulado_especies": 12, "nombres_incorporados": "ardilla" },
+    { "fecha": "27/01/2025", "especies_nuevas": 2, "acumulado_especies": 14, "nombres_incorporados": "corechi, peji" },
+    { "fecha": "08/02/2025", "especies_nuevas": 1, "acumulado_especies": 15, "nombres_incorporados": "jochi pintado" },
+    { "fecha": "09/02/2025", "especies_nuevas": 1, "acumulado_especies": 16, "nombres_incorporados": "tropero" },
+    { "fecha": "11/02/2025", "especies_nuevas": 1, "acumulado_especies": 17, "nombres_incorporados": "mono martin" },
+    { "fecha": "13/02/2025", "especies_nuevas": 1, "acumulado_especies": 18, "nombres_incorporados": "anta" },
+    { "fecha": "21/02/2025", "especies_nuevas": 1, "acumulado_especies": 19, "nombres_incorporados": "carachupa" },
+    { "fecha": "06/04/2025", "especies_nuevas": 1, "acumulado_especies": 20, "nombres_incorporados": "oso hormiguero" }
+  ],
+  "detalle_especies": [
+    { "especie": "ocelote", "primera_fecha": "16/01/2025", "primera_camara": 2, "registros_totales": 24, "eventos_independientes": 23 },
+    { "especie": "tapiti", "primera_fecha": "16/01/2025", "primera_camara": 2, "registros_totales": 73, "eventos_independientes": 59 },
+    { "especie": "tatu", "primera_fecha": "16/01/2025", "primera_camara": 4, "registros_totales": 81, "eventos_independientes": 72 },
+    { "especie": "zorro", "primera_fecha": "16/01/2025", "primera_camara": 19, "registros_totales": 36, "eventos_independientes": 29 },
+    { "especie": "jochi calucha", "primera_fecha": "17/01/2025", "primera_camara": 30, "registros_totales": 579, "eventos_independientes": 404 },
+    { "especie": "tejon", "primera_fecha": "17/01/2025", "primera_camara": 1, "registros_totales": 11, "eventos_independientes": 8 },
+    { "especie": "guaso", "primera_fecha": "19/01/2025", "primera_camara": 31, "registros_totales": 148, "eventos_independientes": 105 },
+    { "especie": "taitetu", "primera_fecha": "19/01/2025", "primera_camara": 19, "registros_totales": 126, "eventos_independientes": 62 },
+    { "especie": "oso bandera", "primera_fecha": "21/01/2025", "primera_camara": 28, "registros_totales": 20, "eventos_independientes": 15 },
+    { "especie": "capibara", "primera_fecha": "22/01/2025", "primera_camara": 1, "registros_totales": 7, "eventos_independientes": 6 },
+    { "especie": "urina", "primera_fecha": "22/01/2025", "primera_camara": 11, "registros_totales": 16, "eventos_independientes": 10 },
+    { "especie": "ardilla", "primera_fecha": "23/01/2025", "primera_camara": 12, "registros_totales": 3, "eventos_independientes": 3 },
+    { "especie": "corechi", "primera_fecha": "27/01/2025", "primera_camara": 6, "registros_totales": 2, "eventos_independientes": 2 },
+    { "especie": "peji", "primera_fecha": "27/01/2025", "primera_camara": 18, "registros_totales": 3, "eventos_independientes": 3 },
+    { "especie": "jochi pintado", "primera_fecha": "08/02/2025", "primera_camara": 2, "registros_totales": 1, "eventos_independientes": 1 },
+    { "especie": "tropero", "primera_fecha": "09/02/2025", "primera_camara": 26, "registros_totales": 4, "eventos_independientes": 3 },
+    { "especie": "mono martin", "primera_fecha": "11/02/2025", "primera_camara": 10, "registros_totales": 6, "eventos_independientes": 4 },
+    { "especie": "anta", "primera_fecha": "13/02/2025", "primera_camara": 4, "registros_totales": 4, "eventos_independientes": 3 },
+    { "especie": "carachupa", "primera_fecha": "21/02/2025", "primera_camara": 15, "registros_totales": 1, "eventos_independientes": 1 },
+    { "especie": "oso hormiguero", "primera_fecha": "06/04/2025", "primera_camara": 17, "registros_totales": 2, "eventos_independientes": 2 }
+  ]
+}

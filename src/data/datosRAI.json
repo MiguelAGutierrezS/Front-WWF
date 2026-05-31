@@ -1,0 +1,28 @@
+{
+  "parametros_globales": {
+    "dias_trampa_total": 2736
+  },
+  "datos": [
+    { "especie": "jochi calucha", "ni": 579, "eventos": 404 },
+    { "especie": "guaso", "ni": 148, "eventos": 105 },
+    { "especie": "taitetu", "ni": 126, "eventos": 62 },
+    { "especie": "tatu", "ni": 81, "eventos": 72 },
+    { "especie": "tapiti", "ni": 73, "eventos": 59 },
+    { "especie": "zorro", "ni": 36, "eventos": 29 },
+    { "especie": "ocelote", "ni": 24, "eventos": 23 },
+    { "especie": "oso bandera", "ni": 20, "eventos": 15 },
+    { "especie": "urina", "ni": 16, "eventos": 10 },
+    { "especie": "tejon", "ni": 11, "eventos": 8 },
+    { "especie": "capibara", "ni": 7, "eventos": 6 },
+    { "especie": "mono martin", "ni": 6, "eventos": 4 },
+    { "especie": "anta", "ni": 4, "eventos": 3 },
+    { "especie": "tropero", "ni": 4, "eventos": 3 },
+    { "especie": "peji", "ni": 3, "eventos": 3 },
+    { "especie": "ardilla", "ni": 3, "eventos": 3 },
+    { "especie": "oso hormiguero", "ni": 2, "eventos": 2 },
+    { "especie": "corechi", "ni": 2, "eventos": 2 },
+    { "especie": "carachupa", "ni": 1, "eventos": 1 },
+    { "especie": "jochi pintado", "ni": 1, "eventos": 1 },
+    { "especie": "mapache", "ni": 0, "eventos": 0 }
+  ]
+}

@@ -1,0 +1,23 @@
+[
+  { "especie": "jochi calucha", "Ene": 83, "Feb": 127, "Mar": 77, "Abr": 117, "Total": 404 },
+  { "especie": "guaso", "Ene": 10, "Feb": 28, "Mar": 40, "Abr": 27, "Total": 105 },
+  { "especie": "taitetu", "Ene": 9, "Feb": 9, "Mar": 26, "Abr": 18, "Total": 62 },
+  { "especie": "tatu", "Ene": 19, "Feb": 18, "Mar": 13, "Abr": 22, "Total": 72 },
+  { "especie": "tapiti", "Ene": 9, "Feb": 13, "Mar": 11, "Abr": 26, "Total": 59 },
+  { "especie": "zorro", "Ene": 8, "Feb": 6, "Mar": 6, "Abr": 9, "Total": 29 },
+  { "especie": "ocelote", "Ene": 7, "Feb": 7, "Mar": 3, "Abr": 6, "Total": 23 },
+  { "especie": "oso bandera", "Ene": 1, "Feb": 3, "Mar": 2, "Abr": 9, "Total": 15 },
+  { "especie": "urina", "Ene": 2, "Feb": 1, "Mar": 2, "Abr": 5, "Total": 10 },
+  { "especie": "tejon", "Ene": 3, "Feb": 2, "Mar": 1, "Abr": 2, "Total": 8 },
+  { "especie": "capibara", "Ene": 3, "Feb": 1, "Mar": 2, "Abr": 0, "Total": 6 },
+  { "especie": "mono martin", "Ene": 0, "Feb": 3, "Mar": 1, "Abr": 0, "Total": 4 },
+  { "especie": "anta", "Ene": 0, "Feb": 1, "Mar": 0, "Abr": 2, "Total": 3 },
+  { "especie": "tropero", "Ene": 0, "Feb": 1, "Mar": 1, "Abr": 1, "Total": 3 },
+  { "especie": "peji", "Ene": 1, "Feb": 0, "Mar": 1, "Abr": 1, "Total": 3 },
+  { "especie": "ardilla", "Ene": 1, "Feb": 0, "Mar": 0, "Abr": 2, "Total": 3 },
+  { "especie": "oso hormiguero", "Ene": 0, "Feb": 0, "Mar": 0, "Abr": 2, "Total": 2 },
+  { "especie": "corechi", "Ene": 2, "Feb": 0, "Mar": 0, "Abr": 0, "Total": 2 },
+  { "especie": "carachupa", "Ene": 0, "Feb": 1, "Mar": 0, "Abr": 0, "Total": 1 },
+  { "especie": "jochi pintado", "Ene": 0, "Feb": 1, "Mar": 0, "Abr": 0, "Total": 1 },
+  { "especie": "mapache", "Ene": 0, "Feb": 0, "Mar": 0, "Abr": 0, "Total": 0 }
+]

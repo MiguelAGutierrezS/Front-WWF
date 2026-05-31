@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
-import { Camera, Save } from 'lucide-react';
-import { projects } from '../../data/mockDatabase';
+import { Camera, Save, Video } from 'lucide-react';
+import { projects, users } from '../../data/mockDatabase';
 
 export const CreateStationModal = () => {
   const { closeModal } = useModalStore();
   
+  // Simulamos que el usuario logueado es el primero (Dra. Elena Silva - uuid-u1)
+  const currentUser = users[0];
+  const userProjects = projects.filter(p => p.user_id === currentUser.id);
+
   const [formData, setFormData] = useState({
-    project_id: projects[0]?.id || '',
+    project_id: userProjects[0]?.id || '',
     station_code: '',
     location_name: '',
     latitude: '',
@@ -17,6 +21,18 @@ export const CreateStationModal = () => {
     camera_model: '',
     status: 'active'
   });
+
+  const [selectedVideos, setSelectedVideos] = useState([]);
+
+  const handleVideoChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 100) {
+      alert('⚠️ Solo puedes subir un máximo de 100 videos a la vez.');
+      setSelectedVideos(files.slice(0, 100));
+    } else {
+      setSelectedVideos(files);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,11 +74,14 @@ export const CreateStationModal = () => {
               onChange={handleChange}
               className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#00ff88] transition-colors cursor-pointer appearance-none"
             >
-              <option value="" disabled className="bg-gray-900">Selecciona un proyecto...</option>
-              {projects.map(p => (
+              <option value="" disabled className="bg-gray-900">Selecciona uno de tus proyectos...</option>
+              {userProjects.map(p => (
                 <option key={p.id} value={p.id} className="bg-gray-900">{p.title}</option>
               ))}
             </select>
+            <p className="text-xs text-purple-400 mt-2 font-semibold">
+              Solo puedes agregar estaciones a proyectos que tú administras (Usuario actual: {currentUser.full_name}).
+            </p>
           </div>
 
           <div className="flex gap-4">
@@ -159,6 +178,51 @@ export const CreateStationModal = () => {
               <option value="active" className="bg-gray-900">🟢 Activa (Grabando / Operativa)</option>
               <option value="inactive" className="bg-gray-900">🔴 Inactiva (En mantenimiento / Robada)</option>
             </select>
+          </div>
+
+          {/* Carga de Videos para Procesamiento Backend */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-6 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-white/10 text-gray-200 rounded-lg">
+                <Video className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white text-lg">Videos de Muestra (Procesamiento IA)</h3>
+                <p className="text-xs text-gray-400">Archivos cortos (Máx 10 seg) para analizar la fauna de esta cámara en el backend.</p>
+              </div>
+            </div>
+            
+            <label className="block w-full border-2 border-dashed border-white/20 hover:border-white/50 rounded-xl p-8 text-center cursor-pointer transition-colors bg-black/40">
+              <input 
+                type="file" 
+                multiple 
+                accept="video/mp4,video/x-m4v,video/*"
+                onChange={handleVideoChange}
+                className="hidden"
+              />
+              <span className="bg-white hover:bg-gray-200 text-black font-bold py-2 px-6 rounded-lg shadow-lg inline-block transition-colors mb-3">
+                Seleccionar Videos
+              </span>
+              <p className="text-gray-400 text-sm font-semibold">
+                Sube hasta 100 archivos simultáneamente.
+              </p>
+            </label>
+
+            {selectedVideos.length > 0 && (
+              <div className="mt-4 p-4 bg-black/50 rounded-lg border border-white/5 flex justify-between items-center">
+                <span className="text-green-400 font-bold">
+                  ✓ {selectedVideos.length} {selectedVideos.length === 1 ? 'video seleccionado' : 'videos seleccionados'} listos para enviar.
+                </span>
+                <button 
+                  type="button" 
+                  onClick={() => setSelectedVideos([])}
+                  className="text-red-400 hover:text-red-300 text-sm font-semibold"
+                >
+                  Limpiar
+                </button>
+              </div>
+            )}
           </div>
 
         </form>

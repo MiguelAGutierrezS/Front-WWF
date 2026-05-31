@@ -1,0 +1,23 @@
+[
+  { "especie": "jochi calucha", "estaciones": 30, "ocupacion_psi": 0.97, "interpretacion": "Alta ocupación" },
+  { "especie": "guaso", "estaciones": 17, "ocupacion_psi": 0.55, "interpretacion": "Ocupación media-alta" },
+  { "especie": "taitetu", "estaciones": 23, "ocupacion_psi": 0.74, "interpretacion": "Ocupación media-alta" },
+  { "especie": "tatu", "estaciones": 20, "ocupacion_psi": 0.65, "interpretacion": "Ocupación media-alta" },
+  { "especie": "tapiti", "estaciones": 11, "ocupacion_psi": 0.35, "interpretacion": "Ocupación media-baja" },
+  { "especie": "zorro", "estaciones": 10, "ocupacion_psi": 0.32, "interpretacion": "Ocupación media-baja" },
+  { "especie": "ocelote", "estaciones": 9, "ocupacion_psi": 0.29, "interpretacion": "Ocupación media-baja" },
+  { "especie": "oso bandera", "estaciones": 8, "ocupacion_psi": 0.26, "interpretacion": "Ocupación media-baja" },
+  { "especie": "urina", "estaciones": 4, "ocupacion_psi": 0.13, "interpretacion": "Baja ocupación" },
+  { "especie": "tejon", "estaciones": 6, "ocupacion_psi": 0.19, "interpretacion": "Baja ocupación" },
+  { "especie": "capibara", "estaciones": 2, "ocupacion_psi": 0.06, "interpretacion": "Baja ocupación" },
+  { "especie": "mono martin", "estaciones": 3, "ocupacion_psi": 0.10, "interpretacion": "Baja ocupación" },
+  { "especie": "anta", "estaciones": 2, "ocupacion_psi": 0.06, "interpretacion": "Baja ocupación" },
+  { "especie": "tropero", "estaciones": 1, "ocupacion_psi": 0.03, "interpretacion": "Baja ocupación" },
+  { "especie": "peji", "estaciones": 3, "ocupacion_psi": 0.10, "interpretacion": "Baja ocupación" },
+  { "especie": "ardilla", "estaciones": 2, "ocupacion_psi": 0.06, "interpretacion": "Baja ocupación" },
+  { "especie": "oso hormiguero", "estaciones": 2, "ocupacion_psi": 0.06, "interpretacion": "Baja ocupación" },
+  { "especie": "corechi", "estaciones": 2, "ocupacion_psi": 0.06, "interpretacion": "Baja ocupación" },
+  { "especie": "carachupa", "estaciones": 1, "ocupacion_psi": 0.03, "interpretacion": "Baja ocupación" },
+  { "especie": "jochi pintado", "estaciones": 1, "ocupacion_psi": 0.03, "interpretacion": "Baja ocupación" },
+  { "especie": "mapache", "estaciones": 0, "ocupacion_psi": 0.00, "interpretacion": "Baja ocupación" }
+]

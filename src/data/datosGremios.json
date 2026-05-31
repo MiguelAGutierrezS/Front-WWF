@@ -1,0 +1,6 @@
+[
+  { "gremio": "herbivoro", "s_especies": 11, "eventos": 660, "porcentaje_eventos": 81 },
+  { "gremio": "omnivoro", "s_especies": 3, "eventos": 37, "porcentaje_eventos": 5 },
+  { "gremio": "insectivoro", "s_especies": 6, "eventos": 95, "porcentaje_eventos": 12 },
+  { "gremio": "carnivoro", "s_especies": 1, "eventos": 23, "porcentaje_eventos": 3 }
+]

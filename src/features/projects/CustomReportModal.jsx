@@ -9,6 +9,14 @@ import {
 } from 'recharts';
 import { Users, Camera, Activity } from 'lucide-react';
 import { BiodiversityPanel } from './BiodiversityPanel';
+import { SeasonalDistributionChart } from './SeasonalDistributionChart';
+import { RelativeAbundanceChart } from './RelativeAbundanceChart';
+import { AccumulationCurveChart } from './AccumulationCurveChart';
+import { TrophicGuildChart } from './TrophicGuildChart';
+import { ActivityPatternChart } from './ActivityPatternChart';
+import { HabitatOccupancyChart } from './HabitatOccupancyChart';
+import { TemperatureCorrelationChart } from './TemperatureCorrelationChart';
+import { PreyAbundanceChart } from './PreyAbundanceChart';
 
 const COLORS = ['#eab308', '#f97316', '#3b82f6', '#22c55e', '#a855f7', '#ef4444', '#14b8a6'];
 
@@ -50,6 +58,19 @@ export const CustomReportModal = () => {
       if (reportFilters.endDate) {
         const end = new Date(reportFilters.endDate);
         capturedSightings = capturedSightings.filter(s => new Date(s.detection_timestamp) <= end);
+      }
+      
+      // Filtrar por Periodo
+      if (reportFilters.activePeriods && reportFilters.activePeriods.length > 0) {
+        capturedSightings = capturedSightings.filter(s => reportFilters.activePeriods.includes(s.periodo));
+      }
+      
+      // Filtrar por Temperatura
+      if (reportFilters.tempMin !== '' && reportFilters.tempMin !== null) {
+        capturedSightings = capturedSightings.filter(s => s.temperatura >= Number(reportFilters.tempMin));
+      }
+      if (reportFilters.tempMax !== '' && reportFilters.tempMax !== null) {
+        capturedSightings = capturedSightings.filter(s => s.temperatura <= Number(reportFilters.tempMax));
       }
     }
 
@@ -175,7 +196,70 @@ export const CustomReportModal = () => {
         {/* Columnas Derecha: Gráficas */}
         <div className="w-full xl:w-2/3 flex flex-col gap-6 pb-12">
           
-          {/* Fila 1: Linea de Tiempo y Frecuencia Horizontal */}
+          {/* Fila 1: Índice de Biodiversidad (Full Width Top) */}
+          {reportFilters?.activeCharts?.includes('biodiversity') && (
+            <div className="w-full">
+              <BiodiversityPanel sightings={capturedSightings} />
+            </div>
+          )}
+
+          {/* Fila 2: Distribución Estacional (Full Width) */}
+          {reportFilters?.activeCharts?.includes('seasonal') && (
+            <div className="w-full">
+              <SeasonalDistributionChart defaultSpecies="taitetu" />
+            </div>
+          )}
+
+          {/* Fila 2.5: Abundancia Relativa RAI (Full Width) */}
+          {reportFilters?.activeCharts?.includes('rai') && (
+            <div className="w-full">
+              <RelativeAbundanceChart />
+            </div>
+          )}
+
+          {/* Fila 2.75: Curva de Acumulación (Full Width) */}
+          {reportFilters?.activeCharts?.includes('accumulation') && (
+            <div className="w-full">
+              <AccumulationCurveChart />
+            </div>
+          )}
+
+          {/* Fila 2.80: Patrón de Actividad (Full Width) */}
+          {reportFilters?.activeCharts?.includes('activity') && (
+            <div className="w-full">
+              <ActivityPatternChart />
+            </div>
+          )}
+
+          {/* Fila 2.82: Ocupación del Hábitat (Full Width) */}
+          {reportFilters?.activeCharts?.includes('occupancy') && (
+            <div className="w-full">
+              <HabitatOccupancyChart />
+            </div>
+          )}
+
+          {/* Fila 2.84: Temperatura vs Actividad (Full Width) */}
+          {reportFilters?.activeCharts?.includes('temperature') && (
+            <div className="w-full">
+              <TemperatureCorrelationChart />
+            </div>
+          )}
+
+          {/* Fila 2.85: Abundancia de Presas (Full Width) */}
+          {reportFilters?.activeCharts?.includes('prey') && (
+            <div className="w-full">
+              <PreyAbundanceChart />
+            </div>
+          )}
+
+          {/* Fila 2.85: Gremios Tróficos (Full Width) */}
+          {reportFilters?.activeCharts?.includes('trophic') && (
+            <div className="w-full">
+              <TrophicGuildChart />
+            </div>
+          )}
+          
+          {/* Fila 3: Linea de Tiempo y Frecuencia Horizontal */}
           <div className="flex flex-col xl:flex-row gap-6 w-full">
             {/* Grafica de Area */}
             {reportFilters?.activeCharts?.includes('timeline') && (
@@ -223,10 +307,10 @@ export const CustomReportModal = () => {
             )}
           </div>
 
-          {/* Fila 2: Gráfica de Pie y Biodiversidad */}
+          {/* Fila 4: Gráfica de Pie */}
           <div className="flex flex-col xl:flex-row gap-6 w-full">
             {reportFilters?.activeCharts?.includes('pie') && (
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 min-h-[350px] flex flex-col shrink-0 flex-1">
+            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 min-h-[350px] flex flex-col shrink-0 flex-1 w-full">
               <h3 className="text-xl font-bold text-white mb-2">Composición del Total de Detecciones</h3>
               <div className="flex-1 flex w-full relative">
               <div className="w-1/2 relative">
@@ -261,7 +345,6 @@ export const CustomReportModal = () => {
             </div>
           </div>
           )}
-          {reportFilters?.activeCharts?.includes('biodiversity') && <BiodiversityPanel sightings={capturedSightings} />}
           </div>
 
         </div>
