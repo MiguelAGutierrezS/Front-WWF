@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL — change this if the backend is deployed elsewhere
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://206.81.8.110:8001';
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -34,7 +34,7 @@ export const getFrequencyIndicator = async ({
 
   if (project_id) queryParts.push(`project_id=${project_id}`);
   if (start_date) queryParts.push(`start_date=${encodeURIComponent(start_date)}`);
-  if (end_date)   queryParts.push(`end_date=${encodeURIComponent(end_date)}`);
+  if (end_date) queryParts.push(`end_date=${encodeURIComponent(end_date)}`);
   station_ids.forEach(id => queryParts.push(`station_ids=${id}`));
 
   const qs = queryParts.length ? `?${queryParts.join('&')}` : '';
@@ -67,7 +67,7 @@ export const getDiversityIndicator = async ({
 
   if (project_id) queryParts.push(`project_id=${project_id}`);
   if (start_date) queryParts.push(`start_date=${encodeURIComponent(start_date)}`);
-  if (end_date)   queryParts.push(`end_date=${encodeURIComponent(end_date)}`);
+  if (end_date) queryParts.push(`end_date=${encodeURIComponent(end_date)}`);
   station_ids.forEach(id => queryParts.push(`station_ids=${id}`));
 
   const qs = queryParts.length ? `?${queryParts.join('&')}` : '';
@@ -100,7 +100,7 @@ export const getRaiIndicator = async ({
 
   if (project_id) queryParts.push(`project_id=${project_id}`);
   if (start_date) queryParts.push(`start_date=${encodeURIComponent(start_date)}`);
-  if (end_date)   queryParts.push(`end_date=${encodeURIComponent(end_date)}`);
+  if (end_date) queryParts.push(`end_date=${encodeURIComponent(end_date)}`);
   station_ids.forEach(id => queryParts.push(`station_ids=${id}`));
 
   const qs = queryParts.length ? `?${queryParts.join('&')}` : '';
@@ -113,7 +113,7 @@ const buildQs = ({ project_id, start_date, end_date, station_ids = [] }) => {
   const parts = [];
   if (project_id) parts.push(`project_id=${project_id}`);
   if (start_date) parts.push(`start_date=${encodeURIComponent(start_date)}`);
-  if (end_date)   parts.push(`end_date=${encodeURIComponent(end_date)}`);
+  if (end_date) parts.push(`end_date=${encodeURIComponent(end_date)}`);
   station_ids.forEach(id => parts.push(`station_ids=${id}`));
   return parts.length ? `?${parts.join('&')}` : '';
 };
