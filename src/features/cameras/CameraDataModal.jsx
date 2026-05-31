@@ -38,35 +38,35 @@ export const CameraDataModal = () => {
   return (
     <FloatingPanel 
       title={null} 
-      className="w-[900px] p-0 overflow-hidden" 
+      className="w-[700px] p-0 overflow-hidden" 
     >
       {/* Custom Header (Resaltado Gris Oscuro) */}
-      <div className="bg-[#1f2937] border-b border-white/10 p-6 flex justify-between items-center relative">
+      <div className="bg-[#1f2937] border-b border-white/10 p-4 flex justify-between items-center relative">
         <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-transparent pointer-events-none"></div>
         <div className="relative z-10">
-          <p className="text-primary font-bold tracking-widest text-sm mb-1 uppercase">
+          <p className="text-primary font-bold tracking-widest text-[10px] mb-1 uppercase">
             {project?.title || 'Proyecto Desconocido'}
           </p>
-          <h2 className="text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl font-extrabold text-white tracking-tight">
             Estación: {modalData.station_code} ({modalData.camera_brand})
           </h2>
         </div>
         <button 
           onClick={closeModal}
-          className="relative z-10 text-white/50 hover:text-white transition-all bg-black/20 hover:bg-black/40 p-3 rounded-full cursor-pointer"
+          className="relative z-10 text-white/50 hover:text-white transition-all bg-black/20 hover:bg-black/40 p-2 rounded-full cursor-pointer"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
 
-      <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
+      <div className="p-4 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
         
         {/* Subtitulo Investigador */}
-        <div className="bg-black/40 border border-white/5 rounded-lg p-4 flex justify-between items-center">
-          <p className="text-lg text-white/90">
+        <div className="bg-black/40 border border-white/5 rounded-lg p-2 flex justify-between items-center">
+          <p className="text-sm text-white/90">
             <span className="font-semibold text-primary">Investigador:</span> {investigator?.full_name || 'No asignado'} ({investigator?.institucion})
           </p>
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-400 text-[10px]">
             Ubicación: {modalData.latitude.toFixed(4)}, {modalData.longitude.toFixed(4)}
           </p>
         </div>
@@ -75,43 +75,43 @@ export const CameraDataModal = () => {
         <div className="border border-white/10 rounded-xl overflow-hidden bg-black/20">
           <button 
             onClick={() => setIsInfoOpen(!isInfoOpen)}
-            className="w-full p-4 flex justify-between items-center hover:bg-white/5 transition-colors cursor-pointer"
+            className="w-full p-2 flex justify-between items-center hover:bg-white/5 transition-colors cursor-pointer"
           >
-            <h3 className="text-2xl font-bold text-white">Información General</h3>
-            {isInfoOpen ? <ChevronUp className="w-6 h-6 text-white/50" /> : <ChevronDown className="w-6 h-6 text-white/50" />}
+            <h3 className="text-lg font-bold text-white">Información General</h3>
+            {isInfoOpen ? <ChevronUp className="w-4 h-4 text-white/50" /> : <ChevronDown className="w-4 h-4 text-white/50" />}
           </button>
           
           {isInfoOpen && (
-            <div className="p-6 border-t border-white/10 animate-in fade-in slide-in-from-top-2 duration-300">
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="bg-white/5 border border-white/5 rounded-xl p-4 text-center flex flex-col justify-center">
-                  <h4 className="text-gray-400 text-base mb-1">Cámaras Instaladas</h4>
-                  <p className="text-4xl font-extrabold text-white">1</p>
+            <div className="p-3 border-t border-white/10 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="grid grid-cols-3 gap-3 mb-3">
+                <div className="bg-white/5 border border-white/5 rounded-xl p-2 text-center flex flex-col justify-center">
+                  <h4 className="text-gray-400 text-xs mb-1">Cámaras Instaladas</h4>
+                  <p className="text-2xl font-extrabold text-white">1</p>
                 </div>
-                <div className="bg-white/5 border border-white/5 rounded-xl p-4 text-center flex flex-col justify-center">
-                  <h4 className="text-gray-400 text-base mb-1">Avistamientos Totales</h4>
-                  <p className="text-4xl font-extrabold text-white">{stationSightings.length}</p>
+                <div className="bg-white/5 border border-white/5 rounded-xl p-2 text-center flex flex-col justify-center">
+                  <h4 className="text-gray-400 text-xs mb-1">Avistamientos Totales</h4>
+                  <p className="text-2xl font-extrabold text-white">{stationSightings.length}</p>
                 </div>
-                <div className="bg-white/5 border border-white/5 rounded-xl p-4 text-center flex flex-col justify-center">
-                  <h4 className="text-gray-400 text-base mb-1">Especies Únicas</h4>
-                  <p className="text-4xl font-extrabold text-primary">{uniqueSpecies}</p>
+                <div className="bg-white/5 border border-white/5 rounded-xl p-2 text-center flex flex-col justify-center">
+                  <h4 className="text-gray-400 text-xs mb-1">Especies Únicas</h4>
+                  <p className="text-2xl font-extrabold text-primary">{uniqueSpecies}</p>
                 </div>
               </div>
 
               {frequencyData.length > 0 && (
-                <div className="bg-white/5 p-6 rounded-xl border border-white/5">
-                  <h4 className="text-xl font-bold text-white mb-4">Frecuencia de Identificación (Esta cámara)</h4>
-                  <div className="w-full" style={{ height: Math.max(250, frequencyData.length * 45) }}>
+                <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                  <h4 className="text-base font-bold text-white mb-2">Frecuencia de Identificación (Esta cámara)</h4>
+                  <div className="w-full" style={{ height: Math.max(200, frequencyData.length * 35) }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={frequencyData} layout="vertical" margin={{ top: 0, right: 30, left: 30, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" horizontal={true} vertical={false}/>
-                        <XAxis type="number" stroke="#ffffff80" fontSize={12} allowDecimals={false} />
-                        <YAxis dataKey="name" type="category" stroke="#ffffff" fontSize={14} width={100} tickLine={false} axisLine={false} interval={0} />
+                        <XAxis type="number" stroke="#ffffff80" fontSize={10} allowDecimals={false} />
+                        <YAxis dataKey="name" type="category" stroke="#ffffff" fontSize={10} width={80} tickLine={false} axisLine={false} interval={0} />
                         <Tooltip 
                           formatter={(value) => [`${value} avistamientos`, 'Total']}
                           contentStyle={{ backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
                         />
-                        <Bar dataKey="value" fill="#00ff88" radius={[0, 4, 4, 0]} barSize={24} />
+                        <Bar dataKey="value" fill="#00ff88" radius={[0, 4, 4, 0]} barSize={16} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -125,23 +125,23 @@ export const CameraDataModal = () => {
         <div className="border border-white/10 rounded-xl overflow-hidden bg-black/20">
           <button 
             onClick={() => setIsTableOpen(!isTableOpen)}
-            className="w-full p-4 flex justify-between items-center hover:bg-white/5 transition-colors cursor-pointer"
+            className="w-full p-2 flex justify-between items-center hover:bg-white/5 transition-colors cursor-pointer"
           >
-            <h3 className="text-2xl font-bold text-white">Registros de Avistamiento</h3>
-            {isTableOpen ? <ChevronUp className="w-6 h-6 text-white/50" /> : <ChevronDown className="w-6 h-6 text-white/50" />}
+            <h3 className="text-lg font-bold text-white">Registros de Avistamiento</h3>
+            {isTableOpen ? <ChevronUp className="w-4 h-4 text-white/50" /> : <ChevronDown className="w-4 h-4 text-white/50" />}
           </button>
           
           {isTableOpen && (
-            <div className="p-6 border-t border-white/10 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="p-3 border-t border-white/10 animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="bg-black/40 rounded-xl border border-white/5 overflow-hidden">
-                <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
-                  <table className="w-full text-base text-left">
-                    <thead className="bg-[#1f2937] text-white text-lg sticky top-0 z-10 shadow-md">
+                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
+                  <table className="w-full text-xs text-left">
+                    <thead className="bg-[#1f2937] text-white text-sm sticky top-0 z-10 shadow-md">
                       <tr>
-                        <th className="px-5 py-4">Animal Detectado</th>
-                        <th className="px-5 py-4">Fecha</th>
-                        <th className="px-5 py-4">Hora</th>
-                        <th className="px-5 py-4 text-center">Imagen</th>
+                        <th className="px-3 py-2">Animal Detectado</th>
+                        <th className="px-3 py-2">Fecha</th>
+                        <th className="px-3 py-2">Hora</th>
+                        <th className="px-3 py-2 text-center">Imagen</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/10">
@@ -149,20 +149,20 @@ export const CameraDataModal = () => {
                         const dateObj = new Date(d.detection_timestamp);
                         return (
                           <tr key={i} className="hover:bg-white/10 transition-colors cursor-pointer group">
-                            <td className="px-5 py-4 font-bold text-primary group-hover:text-green-400 transition-colors">{d.common_name}</td>
-                            <td className="px-5 py-4 text-gray-300">{dateObj.toLocaleDateString()}</td>
-                            <td className="px-5 py-4 text-gray-300">
+                            <td className="px-3 py-2 font-bold text-primary group-hover:text-green-400 transition-colors">{d.common_name}</td>
+                            <td className="px-3 py-2 text-gray-300">{dateObj.toLocaleDateString()}</td>
+                            <td className="px-3 py-2 text-gray-300">
                               {dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </td>
-                            <td className="px-5 py-4 text-center">
+                            <td className="px-3 py-2 text-center">
                               <a 
                                 href={d.image_url} 
                                 target="_blank" 
                                 rel="noreferrer" 
-                                className="inline-flex items-center justify-center p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-full transition-colors"
+                                className="inline-flex items-center justify-center p-1 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-full transition-colors"
                                 title="Ver imagen capturada"
                               >
-                                <ImageIcon className="w-6 h-6" />
+                                <ImageIcon className="w-4 h-4" />
                               </a>
                             </td>
                           </tr>
@@ -170,7 +170,7 @@ export const CameraDataModal = () => {
                       })}
                       {stationSightings.length === 0 && (
                         <tr>
-                          <td colSpan="4" className="px-5 py-4 text-center text-gray-400">No hay detecciones recientes.</td>
+                          <td colSpan="4" className="px-3 py-2 text-center text-gray-400">No hay detecciones recientes.</td>
                         </tr>
                       )}
                     </tbody>

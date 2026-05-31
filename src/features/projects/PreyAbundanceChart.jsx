@@ -9,11 +9,11 @@ export const PreyAbundanceChart = () => {
   }, []);
 
   return (
-    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex-1 flex flex-col w-full min-w-[300px]">
-      <h3 className="text-xl font-bold text-white mb-2">Abundancia de Presas (Jaguar)</h3>
-      <p className="text-sm text-gray-400 mb-6">Comparativa entre eventos en bruto y eventos estadísticos (independientes).</p>
+    <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex-1 flex flex-col w-full min-w-[300px]">
+      <h3 className="text-base font-bold text-white mb-1">Abundancia de Presas (Jaguar)</h3>
+      <p className="text-xs text-gray-400 mb-4">Comparativa entre eventos en bruto y eventos estadísticos (independientes).</p>
       
-      <div className="w-full" style={{ height: Math.max(400, chartData.length * 45) }}>
+      <div className="w-full" style={{ height: Math.max(300, chartData.length * 35) }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart 
             data={chartData} 
@@ -24,7 +24,7 @@ export const PreyAbundanceChart = () => {
             <XAxis 
               type="number" 
               stroke="#ffffff80" 
-              fontSize={12} 
+              fontSize={10} 
               tickLine={false} 
               axisLine={false} 
             />
@@ -32,7 +32,7 @@ export const PreyAbundanceChart = () => {
               dataKey="presa" 
               type="category" 
               stroke="#ffffff" 
-              fontSize={14} 
+              fontSize={10} 
               width={100} 
               tickLine={false} 
               axisLine={false} 
@@ -44,9 +44,9 @@ export const PreyAbundanceChart = () => {
               itemStyle={{ color: '#fff', fontWeight: 'bold' }}
               cursor={{ fill: 'rgba(255,255,255,0.05)' }}
             />
-            <Legend wrapperStyle={{ paddingTop: '20px' }} formatter={(value) => <span className="text-white font-medium capitalize">{value}</span>} />
-            <Bar dataKey="eventos_bruto" name="Bruto" fill="#1f497d" radius={[0, 4, 4, 0]} barSize={12} animationDuration={1500} />
-            <Bar dataKey="eventos_estadistico" name="Estadístico" fill="#e46c0a" radius={[0, 4, 4, 0]} barSize={12} animationDuration={1500} />
+            <Legend wrapperStyle={{ paddingTop: '20px' }} formatter={(value) => <span className="text-white text-xs font-medium capitalize">{value}</span>} />
+            <Bar dataKey="eventos_bruto" name="Bruto" fill="#1f497d" radius={[0, 4, 4, 0]} barSize={10} animationDuration={1500} />
+            <Bar dataKey="eventos_estadistico" name="Estadístico" fill="#e46c0a" radius={[0, 4, 4, 0]} barSize={10} animationDuration={1500} />
           </BarChart>
         </ResponsiveContainer>
       </div>

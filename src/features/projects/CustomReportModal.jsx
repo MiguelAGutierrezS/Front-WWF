@@ -11,7 +11,6 @@ import { Users, Camera, Activity } from 'lucide-react';
 import { BiodiversityPanel } from './BiodiversityPanel';
 import { SeasonalDistributionChart } from './SeasonalDistributionChart';
 import { RelativeAbundanceChart } from './RelativeAbundanceChart';
-import { AccumulationCurveChart } from './AccumulationCurveChart';
 import { TrophicGuildChart } from './TrophicGuildChart';
 import { ActivityPatternChart } from './ActivityPatternChart';
 import { HabitatOccupancyChart } from './HabitatOccupancyChart';
@@ -125,15 +124,15 @@ export const CustomReportModal = () => {
 
   return (
     <FloatingPanel 
-      className="w-full h-full p-6 md:p-8 bg-black/95 backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10"
+      className="w-full h-full p-4 md:p-6 bg-black/95 backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10"
     >
-      <div className="flex justify-between items-start border-b border-white/10 pb-6 mb-6">
+      <div className="flex justify-between items-start border-b border-white/10 pb-4 mb-4">
         <div>
-          <p className="text-primary font-bold tracking-widest text-sm mb-1 uppercase">
+          <p className="text-primary font-bold tracking-widest text-xs mb-1 uppercase">
             Reporte Generado por Usuario
           </p>
-          <h1 className="text-4xl font-extrabold text-white">Análisis de Área Seleccionada</h1>
-          <p className="text-xl text-gray-400 mt-2 max-w-4xl">
+          <h1 className="text-3xl font-extrabold text-white">Análisis de Área Seleccionada</h1>
+          <p className="text-lg text-gray-400 mt-2 max-w-4xl">
             Este reporte unifica los datos de {selectedCameras?.length} estaciones capturadas en tu selección geográfica.
           </p>
         </div>
@@ -142,50 +141,50 @@ export const CustomReportModal = () => {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-8 pr-4">
+      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-6 pr-4">
         {/* Columna Izquierda: Detalles e Investigadores */}
-        <div className="w-full xl:w-1/3 space-y-6 shrink-0">
-          <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-            <h3 className="text-2xl font-bold text-white mb-6">Resumen del Área</h3>
+        <div className="w-full xl:w-1/3 space-y-4 shrink-0 sticky top-0 h-max z-10">
+          <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+            <h3 className="text-xl font-bold text-white mb-4">Resumen del Área</h3>
             
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 bg-black/40 p-4 rounded-xl border border-white/5">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 bg-black/40 p-3 rounded-xl border border-white/5">
                 <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400">
                   <Camera className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400 font-semibold">Estaciones Capturadas</p>
-                  <p className="text-2xl font-bold text-white">{selectedCameras?.length}</p>
+                  <p className="text-xs text-gray-400 font-semibold">Estaciones Capturadas</p>
+                  <p className="text-xl font-bold text-white">{selectedCameras?.length}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 bg-black/40 p-4 rounded-xl border border-white/5">
-                <div className="p-3 bg-green-500/20 rounded-lg text-green-400">
-                  <Activity className="w-6 h-6" />
+              <div className="flex items-center gap-3 bg-black/40 p-3 rounded-xl border border-white/5">
+                <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
+                  <Activity className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400 font-semibold">Avistamientos Totales</p>
-                  <p className="text-2xl font-bold text-white">{capturedSightings?.length}</p>
+                  <p className="text-xs text-gray-400 font-semibold">Avistamientos Totales</p>
+                  <p className="text-xl font-bold text-white">{capturedSightings?.length}</p>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-purple-900/40 to-black p-6 rounded-2xl border border-purple-500/30">
-            <div className="flex items-center gap-3 mb-4">
-              <Users className="w-6 h-6 text-purple-400" />
-              <h3 className="text-2xl font-bold text-white">Créditos de Investigación</h3>
+          <div className="bg-gradient-to-br from-purple-900/40 to-black p-4 rounded-2xl border border-purple-500/30">
+            <div className="flex items-center gap-3 mb-3">
+              <Users className="w-5 h-5 text-purple-400" />
+              <h3 className="text-xl font-bold text-white">Créditos de Investigación</h3>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed mb-6">
+            <p className="text-sm text-gray-400 leading-relaxed mb-4">
               Los datos geoespaciales de este reporte fueron posibles gracias a las estaciones desplegadas por los siguientes investigadores e instituciones:
             </p>
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               {creditedInvestigators?.map(inv => (
-                <div key={inv.id} className="bg-white/5 p-4 rounded-xl border border-white/10 flex items-center justify-between hover:bg-white/10 transition-colors">
+                <div key={inv.id} className="bg-white/5 p-3 rounded-xl border border-white/10 flex items-center justify-between hover:bg-white/10 transition-colors">
                   <div>
-                    <p className="font-bold text-white text-lg">{inv.full_name}</p>
-                    <p className="text-purple-300 text-sm">{inv.institucion}</p>
+                    <p className="font-bold text-white text-base">{inv.full_name}</p>
+                    <p className="text-purple-300 text-xs">{inv.institucion}</p>
                   </div>
                 </div>
               ))}
@@ -194,7 +193,7 @@ export const CustomReportModal = () => {
         </div>
 
         {/* Columnas Derecha: Gráficas */}
-        <div className="w-full xl:w-2/3 flex flex-col gap-6 pb-12">
+        <div className="w-full xl:w-2/3 flex flex-col gap-4 pb-8">
           
           {/* Fila 1: Índice de Biodiversidad (Full Width Top) */}
           {reportFilters?.activeCharts?.includes('biodiversity') && (
@@ -214,13 +213,6 @@ export const CustomReportModal = () => {
           {reportFilters?.activeCharts?.includes('rai') && (
             <div className="w-full">
               <RelativeAbundanceChart />
-            </div>
-          )}
-
-          {/* Fila 2.75: Curva de Acumulación (Full Width) */}
-          {reportFilters?.activeCharts?.includes('accumulation') && (
-            <div className="w-full">
-              <AccumulationCurveChart />
             </div>
           )}
 
@@ -260,12 +252,12 @@ export const CustomReportModal = () => {
           )}
           
           {/* Fila 3: Linea de Tiempo y Frecuencia Horizontal */}
-          <div className="flex flex-col xl:flex-row gap-6 w-full">
+          <div className="flex flex-col xl:flex-row gap-4 w-full">
             {/* Grafica de Area */}
             {reportFilters?.activeCharts?.includes('timeline') && (
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
-              <h3 className="text-xl font-bold text-white mb-4">Línea de Tiempo de Detecciones</h3>
-              <div className="w-full" style={{ minHeight: '300px', height: '100%' }}>
+            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
+              <h3 className="text-xs font-bold text-white mb-1">Línea de Tiempo de Detecciones</h3>
+              <div className="w-full" style={{ minHeight: '220px', height: '100%' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={timelineData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
@@ -274,8 +266,8 @@ export const CustomReportModal = () => {
                         <stop offset="95%" stopColor="#00ff88" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <XAxis dataKey="month" stroke="#ffffff80" fontSize={12} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#ffffff80" fontSize={12} tickLine={false} axisLine={false} />
+                    <XAxis dataKey="month" stroke="#ffffff80" fontSize={8} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#ffffff80" fontSize={8} tickLine={false} axisLine={false} />
                     <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" vertical={false} />
                     <Tooltip contentStyle={{ backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}/>
                     <Area type="monotone" dataKey="avistamientos" stroke="#00ff88" strokeWidth={3} fillOpacity={1} fill="url(#colorUv)" />
@@ -287,14 +279,14 @@ export const CustomReportModal = () => {
 
             {/* Gráfica de Barras Horizontales (Frecuencia %) */}
             {reportFilters?.activeCharts?.includes('frequency') && (
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
-              <h3 className="text-xl font-bold text-white mb-4">Frecuencia por Animal (%)</h3>
-              <div className="w-full" style={{ height: Math.max(300, frequencyData?.length * 45) }}>
+            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
+              <h3 className="text-xs font-bold text-white mb-1">Frecuencia por Animal (%)</h3>
+              <div className="w-full" style={{ height: Math.max(220, frequencyData?.length * 35) }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={frequencyData} layout="vertical" margin={{ top: 0, right: 30, left: 30, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" horizontal={true} vertical={false}/>
-                    <XAxis type="number" stroke="#ffffff80" fontSize={12} domain={[0, 100]} tickFormatter={(val) => `${val}%`} />
-                    <YAxis dataKey="name" type="category" stroke="#ffffff" fontSize={14} width={120} tickLine={false} axisLine={false} interval={0} />
+                    <XAxis type="number" stroke="#ffffff80" fontSize={8} domain={[0, 100]} tickFormatter={(val) => `${val}%`} />
+                    <YAxis dataKey="name" type="category" stroke="#ffffff" fontSize={9} width={100} tickLine={false} axisLine={false} interval={0} />
                     <Tooltip 
                       formatter={(value) => [`${value}%`, 'Frecuencia']}
                       contentStyle={{ backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
@@ -307,44 +299,6 @@ export const CustomReportModal = () => {
             )}
           </div>
 
-          {/* Fila 4: Gráfica de Pie */}
-          <div className="flex flex-col xl:flex-row gap-6 w-full">
-            {reportFilters?.activeCharts?.includes('pie') && (
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 min-h-[350px] flex flex-col shrink-0 flex-1 w-full">
-              <h3 className="text-xl font-bold text-white mb-2">Composición del Total de Detecciones</h3>
-              <div className="flex-1 flex w-full relative">
-              <div className="w-1/2 relative">
-                <ResponsiveContainer width="100%" height="100%" className="absolute inset-0">
-                  <PieChart>
-                    <Pie
-                      data={speciesData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={100}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {speciesData?.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="w-1/2 flex flex-col justify-center space-y-3 overflow-y-auto custom-scrollbar pr-2">
-                 {speciesData?.map((item, idx) => (
-                   <div key={idx} className="flex items-center gap-3">
-                     <div className="w-4 h-4 rounded-sm shrink-0" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
-                     <span className="text-lg font-medium text-white truncate">{item.name}</span>
-                     <span className="text-lg text-gray-400 ml-auto whitespace-nowrap">{item.value} registros</span>
-                   </div>
-                 ))}
-              </div>
-            </div>
-          </div>
-          )}
           </div>
 
         </div>

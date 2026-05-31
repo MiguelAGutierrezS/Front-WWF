@@ -72,58 +72,58 @@ export const ProjectGiantModal = () => {
 
   return (
     <FloatingPanel 
-      className="w-full h-full p-6 md:p-8 bg-black/95 backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10"
+      className="w-full h-full p-3 md:p-4 bg-black/95 backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10"
     >
-      <div className="flex justify-between items-start border-b border-white/10 pb-6 mb-6">
+      <div className="flex justify-between items-start border-b border-white/10 pb-3 mb-3">
         <div>
           <button 
             onClick={handleBack} 
-            className="text-primary hover:text-white mb-2 font-medium text-lg flex items-center cursor-pointer transition-colors"
+            className="text-primary hover:text-white mb-2 font-medium text-sm flex items-center cursor-pointer transition-colors"
           >
             ← Volver a Resumen
           </button>
-          <h1 className="text-4xl font-extrabold text-white">{modalData.title}</h1>
-          <p className="text-xl text-gray-400 mt-2 max-w-4xl">{modalData.description}</p>
+          <h1 className="text-2xl font-extrabold text-white">{modalData.title}</h1>
+          <p className="text-base text-gray-400 mt-1 max-w-4xl">{modalData.description}</p>
         </div>
         <button onClick={handleCloseEntirely} className="text-white/40 hover:text-white p-2 bg-white/5 rounded-full cursor-pointer">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-8 pr-4">
+      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-4 pr-3">
           
         {/* Columna Izquierda: Detalles del Proyecto */}
-        <div className="w-full xl:w-1/3 space-y-6 shrink-0">
-          <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-            <h3 className="text-2xl font-bold text-white mb-4">Información Clave</h3>
-            <ul className="space-y-4 text-lg text-gray-300">
+        <div className="w-full xl:w-1/3 space-y-3 shrink-0 sticky top-0 h-max z-10">
+          <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+            <h3 className="text-xl font-bold text-white mb-3">Información Clave</h3>
+            <ul className="space-y-3 text-base text-gray-300">
               <li><strong className="text-white">Investigador Principal:</strong> {investigator?.full_name} ({investigator?.institucion})</li>
               <li><strong className="text-white">Cámaras Activas:</strong> {projectCameras?.length} unidades</li>
               <li><strong className="text-white">Avistamientos Totales:</strong> {projectSightings?.length} registros IA</li>
             </ul>
           </div>
           
-          <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-            <h3 className="text-2xl font-bold text-white mb-4">Objetivos del Proyecto</h3>
-            <p className="text-lg text-gray-300 leading-relaxed mb-4">
+          <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+            <h3 className="text-xl font-bold text-white mb-3">Objetivos del Proyecto</h3>
+            <p className="text-base text-gray-300 leading-relaxed mb-4">
               {modalData.objectives}
             </p>
-            <h4 className="text-xl font-bold text-white mb-2">Resultados Esperados</h4>
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <h4 className="text-lg font-bold text-white mb-2">Resultados Esperados</h4>
+            <p className="text-base text-gray-300 leading-relaxed">
               {modalData.expected_results}
             </p>
           </div>
         </div>
 
         {/* Columnas Derecha: Gráficas */}
-        <div className="w-full xl:w-2/3 flex flex-col gap-6 pb-12">
+        <div className="w-full xl:w-2/3 flex flex-col gap-4 pb-8">
           
           {/* Fila 1: Linea de Tiempo y Frecuencia Horizontal */}
-          <div className="flex flex-col xl:flex-row gap-6 w-full">
+          <div className="flex flex-col xl:flex-row gap-4 w-full">
             {/* Grafica de Area */}
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
-              <h3 className="text-xl font-bold text-white mb-4">Línea de Tiempo de Detecciones</h3>
-              <div className="w-full" style={{ minHeight: '300px', height: '100%' }}>
+            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
+              <h3 className="text-sm font-bold text-white mb-1">Línea de Tiempo de Detecciones</h3>
+              <div className="w-full" style={{ minHeight: '220px', height: '100%' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={timelineData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
@@ -132,8 +132,8 @@ export const ProjectGiantModal = () => {
                         <stop offset="95%" stopColor="#00ff88" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <XAxis dataKey="month" stroke="#ffffff80" fontSize={12} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#ffffff80" fontSize={12} tickLine={false} axisLine={false} />
+                    <XAxis dataKey="month" stroke="#ffffff80" fontSize={9} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#ffffff80" fontSize={9} tickLine={false} axisLine={false} />
                     <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" vertical={false} />
                     <Tooltip contentStyle={{ backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}/>
                     <Area type="monotone" dataKey="avistamientos" stroke="#00ff88" strokeWidth={3} fillOpacity={1} fill="url(#colorUv)" />
@@ -143,14 +143,14 @@ export const ProjectGiantModal = () => {
             </div>
 
             {/* Gráfica de Barras Horizontales (Frecuencia %) */}
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
-              <h3 className="text-xl font-bold text-white mb-4">Frecuencia por Animal (%)</h3>
-              <div className="w-full" style={{ height: Math.max(300, frequencyData.length * 45) }}>
+            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
+              <h3 className="text-sm font-bold text-white mb-1">Frecuencia por Animal (%)</h3>
+              <div className="w-full" style={{ height: Math.max(220, frequencyData.length * 35) }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={frequencyData} layout="vertical" margin={{ top: 0, right: 30, left: 30, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" horizontal={true} vertical={false}/>
-                    <XAxis type="number" stroke="#ffffff80" fontSize={12} domain={[0, 100]} tickFormatter={(val) => `${val}%`} />
-                    <YAxis dataKey="name" type="category" stroke="#ffffff" fontSize={14} width={120} tickLine={false} axisLine={false} interval={0} />
+                    <XAxis type="number" stroke="#ffffff80" fontSize={9} domain={[0, 100]} tickFormatter={(val) => `${val}%`} />
+                    <YAxis dataKey="name" type="category" stroke="#ffffff" fontSize={10} width={100} tickLine={false} axisLine={false} interval={0} />
                     <Tooltip 
                       formatter={(value) => [`${value}%`, 'Frecuencia']}
                       contentStyle={{ backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
@@ -162,43 +162,8 @@ export const ProjectGiantModal = () => {
             </div>
           </div>
 
-          {/* Fila 2: Gráfica de Pie y Biodiversidad */}
-          <div className="flex flex-col xl:flex-row gap-6 w-full">
-            <div className="bg-white/5 p-6 rounded-2xl border border-white/10 min-h-[350px] flex flex-col shrink-0 flex-1">
-              <h3 className="text-xl font-bold text-white mb-2">Composición del Total de Detecciones</h3>
-              <div className="flex-1 flex w-full relative">
-              <div className="w-1/2 relative">
-                <ResponsiveContainer width="100%" height="100%" className="absolute inset-0">
-                  <PieChart>
-                    <Pie
-                      data={speciesData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={100}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {speciesData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="w-1/2 flex flex-col justify-center space-y-3 overflow-y-auto custom-scrollbar pr-2">
-                 {speciesData.map((item, idx) => (
-                   <div key={idx} className="flex items-center gap-3">
-                     <div className="w-4 h-4 rounded-sm shrink-0" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
-                     <span className="text-lg font-medium text-white truncate">{item.name}</span>
-                     <span className="text-lg text-gray-400 ml-auto whitespace-nowrap">{item.value} registros</span>
-                   </div>
-                 ))}
-              </div>
-            </div>
-          </div>
-          <BiodiversityPanel sightings={projectSightings} />
+          <div className="flex flex-col xl:flex-row gap-4 w-full">
+            <BiodiversityPanel sightings={projectSightings} />
           </div>
 
         </div>

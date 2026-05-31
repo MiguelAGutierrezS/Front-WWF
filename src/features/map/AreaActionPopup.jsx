@@ -31,7 +31,7 @@ export const AreaActionPopup = () => {
       <div className="relative -top-12 -left-1/2 transform translate-x-1/4 animate-in zoom-in slide-in-from-bottom-2 duration-300 flex items-center gap-2">
         <button 
           onClick={handleConfigClick}
-          className="bg-primary hover:bg-green-400 text-black font-extrabold px-8 py-4 text-xl rounded-full shadow-[0_0_20px_rgba(0,255,136,0.5)] flex items-center justify-center whitespace-nowrap border-2 border-black/20 cursor-pointer transition-all hover:scale-105"
+          className="bg-primary hover:bg-green-400 text-black font-extrabold px-6 py-3 text-base rounded-full shadow-[0_0_20px_rgba(0,255,136,0.5)] flex items-center justify-center whitespace-nowrap border-2 border-black/20 cursor-pointer transition-all hover:scale-105"
         >
           Configurar Reporte ({selectedCameraIds.length} Estaciones)
         </button>
