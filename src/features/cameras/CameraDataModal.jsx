@@ -101,8 +101,8 @@ export const CameraDataModal = () => {
               {frequencyData.length > 0 && (
                 <div className="bg-white/5 p-3 rounded-xl border border-white/5">
                   <h4 className="text-base font-bold text-white mb-2">Frecuencia de Identificación (Esta cámara)</h4>
-                  <div className="w-full" style={{ height: Math.max(200, frequencyData.length * 35) }}>
-                    <ResponsiveContainer width="100%" height="100%">
+                  <div className="w-full" style={{ height: Math.max(200, frequencyData.length * 35), minWidth: 0, minHeight: 0 }}>
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                       <BarChart data={frequencyData} layout="vertical" margin={{ top: 0, right: 30, left: 30, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" horizontal={true} vertical={false}/>
                         <XAxis type="number" stroke="#ffffff80" fontSize={10} allowDecimals={false} />

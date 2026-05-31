@@ -299,8 +299,6 @@ export const CustomReportModal = () => {
             )}
           </div>
 
-          </div>
-
         </div>
       </div>
     </FloatingPanel>
