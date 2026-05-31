@@ -159,15 +159,24 @@ export const CameraDataModal = () => {
                               {dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </td>
                             <td className="px-3 py-2 text-center">
-                              <a 
-                                href={d.image_url} 
-                                target="_blank" 
-                                rel="noreferrer" 
-                                className="inline-flex items-center justify-center p-1 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-full transition-colors"
-                                title="Ver imagen capturada"
-                              >
-                                <ImageIcon className="w-4 h-4" />
-                              </a>
+                              {d.url_img ? (
+                                <a 
+                                  href={d.url_img} 
+                                  target="_blank" 
+                                  rel="noreferrer" 
+                                  className="inline-block overflow-hidden rounded-md border border-white/20 hover:border-white/50 transition-colors"
+                                  title="Ver imagen en tamaño completo"
+                                >
+                                  <img 
+                                    src={d.url_img} 
+                                    alt={d.common_name} 
+                                    className="w-12 h-12 object-cover" 
+                                    loading="lazy"
+                                  />
+                                </a>
+                              ) : (
+                                <span className="text-gray-500 text-xs italic">- No disp. -</span>
+                              )}
                             </td>
                           </tr>
                         )
