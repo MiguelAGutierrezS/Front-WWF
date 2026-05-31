@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export const useMapStore = create((set) => ({
   mode: 'cameras', // 'cameras'
   activeProjectId: null,
+  cameraStations: [], // dynamically loaded camera stations
   drawingMode: null, // 'circle' | 'rectangle' | null
   selectionShape: null, // the active shape bounds/coords
   selectedCameraIds: [], // cameras captured by the shape
@@ -23,6 +24,7 @@ export const useMapStore = create((set) => ({
   },
   setMode: (mode) => set({ mode }),
   setActiveProject: (projectId) => set({ activeProjectId: projectId }),
+  setCameraStations: (stations) => set({ cameraStations: stations }),
   setDrawingMode: (drawingMode) => set({ drawingMode }),
   setSelectionShape: (shape) => set({ selectionShape: shape }),
   setSelectedCameraIds: (ids) => set({ selectedCameraIds: ids }),

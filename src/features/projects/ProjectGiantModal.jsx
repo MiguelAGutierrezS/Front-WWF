@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
-import { users, camera_stations, species } from '../../data/mockDatabase';
+import { users, species } from '../../data/mockDatabase';
 import { 
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, 
   PieChart, Pie, Cell, BarChart, Bar 
@@ -14,6 +14,7 @@ const COLORS = ['#eab308', '#f97316', '#3b82f6', '#22c55e', '#a855f7', '#ef4444'
 export const ProjectGiantModal = () => {
   const { modalData, openModal, closeModal } = useModalStore();
   const setActiveProject = useMapStore((state) => state.setActiveProject);
+  const cameraStations = useMapStore((state) => state.cameraStations);
   
   const handleBack = () => {
     openModal('projectList');
@@ -29,7 +30,7 @@ export const ProjectGiantModal = () => {
     if (!modalData) return {};
     
     const investigator = users.find(u => u.id === modalData.user_id);
-    const projectCameras = camera_stations.filter(c => c.project_id === modalData.id);
+    const projectCameras = cameraStations.filter(c => c.project_id === modalData.id);
     const cameraIds = projectCameras.map(c => c.id);
     const projectSightings = species.filter(s => cameraIds.includes(s.station_id));
 

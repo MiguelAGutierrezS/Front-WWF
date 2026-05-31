@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
-import { users, projects, camera_stations, species } from '../../data/mockDatabase';
+import { users, projects, species } from '../../data/mockDatabase';
 import { 
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, 
   PieChart, Pie, Cell, BarChart, Bar 
@@ -23,7 +23,7 @@ const COLORS = ['#eab308', '#f97316', '#3b82f6', '#22c55e', '#a855f7', '#ef4444'
 
 export const CustomReportModal = () => {
   const { openModal, closeModal } = useModalStore();
-  const { selectedCameraIds, reportFilters, clearSelection } = useMapStore();
+  const { selectedCameraIds, reportFilters, clearSelection, cameraStations } = useMapStore();
 
   const handleCloseEntirely = () => {
     clearSelection();
@@ -41,7 +41,7 @@ export const CustomReportModal = () => {
   } = useMemo(() => {
     if (!selectedCameraIds || selectedCameraIds.length === 0) return {};
     
-    const selectedCameras = camera_stations.filter(c => selectedCameraIds.includes(c.id));
+    const selectedCameras = cameraStations.filter(c => selectedCameraIds.includes(c.id));
     let capturedSightings = species.filter(s => selectedCameraIds.includes(s.station_id));
 
     // APLICAR FILTROS

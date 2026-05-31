@@ -2,7 +2,8 @@ import React, { useEffect, useMemo } from 'react';
 import { APIProvider, Map, AdvancedMarker, useMap } from '@vis.gl/react-google-maps';
 import { useMapStore } from '../../store/useMapStore';
 import { useModalStore } from '../../store/useModalStore';
-import { camera_stations, species } from '../../data/mockDatabase';
+import { getCameraStations } from '../../services/api';
+import { species } from '../../data/mockDatabase';
 import { MapSelectionLayer } from './MapSelectionLayer';
 import { AreaActionPopup } from './AreaActionPopup';
 import { ScanEye } from 'lucide-react';
@@ -10,11 +11,12 @@ import { ScanEye } from 'lucide-react';
 const MapController = () => {
   const map = useMap();
   const activeProjectId = useMapStore((state) => state.activeProjectId);
+  const cameraStations = useMapStore((state) => state.cameraStations);
 
   useEffect(() => {
-    if (map && activeProjectId) {
+    if (map && activeProjectId && cameraStations.length > 0) {
       // Filtrar las cámaras de este proyecto para calcular el centro
-      const projectCameras = camera_stations.filter(c => c.project_id === activeProjectId);
+      const projectCameras = cameraStations.filter(c => c.project_id === activeProjectId);
       
       if (projectCameras.length > 0) {
         const avgLat = projectCameras.reduce((acc, c) => acc + c.latitude, 0) / projectCameras.length;
@@ -24,7 +26,7 @@ const MapController = () => {
         map.setZoom(12);
       }
     }
-  }, [map, activeProjectId]);
+  }, [map, activeProjectId, cameraStations]);
 
   return null;
 };
@@ -32,11 +34,31 @@ const MapController = () => {
 export const FullScreenMap = () => {
   const activeProjectId = useMapStore((state) => state.activeProjectId);
   const selectedCameraIds = useMapStore((state) => state.selectedCameraIds);
+  const cameraStations = useMapStore((state) => state.cameraStations);
+  const setCameraStations = useMapStore((state) => state.setCameraStations);
   const globalCameraFilters = useMapStore((state) => state.globalCameraFilters);
   const openModal = useModalStore((state) => state.openModal);
 
+  // Fetch camera stations from endpoint
+  useEffect(() => {
+    const loadStations = async () => {
+      try {
+        const data = await getCameraStations({ skip: 0, limit: 100 });
+        const parsed = data.map(s => ({
+          ...s,
+          latitude: parseFloat(s.latitude),
+          longitude: parseFloat(s.longitude)
+        }));
+        setCameraStations(parsed);
+      } catch (err) {
+        console.error('Error loading camera stations:', err);
+      }
+    };
+    loadStations();
+  }, [setCameraStations]);
+
   const filteredStations = useMemo(() => {
-    return camera_stations.filter(cam => {
+    return cameraStations.filter(cam => {
       // 1. Get sightings for this camera
       let camSightings = species.filter(s => s.station_id === cam.id);
       
@@ -51,7 +73,6 @@ export const FullScreenMap = () => {
       let endTime = null;
       
       if (globalCameraFilters?.dateStart) {
-        // Need to handle timezone slightly carefully, but generic JS Date is fine for mock
         startTime = new Date(globalCameraFilters.dateStart).getTime();
       }
       if (globalCameraFilters?.dateEnd) {
@@ -85,7 +106,7 @@ export const FullScreenMap = () => {
       
       return true;
     });
-  }, [globalCameraFilters]);
+  }, [cameraStations, globalCameraFilters]);
 
   return (
     <div className="absolute inset-0 z-0 bg-gray-900">

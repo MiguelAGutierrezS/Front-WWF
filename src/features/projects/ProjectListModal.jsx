@@ -3,12 +3,13 @@ import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
 import { Button } from '../../components/ui/Button';
-import { projects, users, camera_stations, species } from '../../data/mockDatabase';
+import { projects, users, species } from '../../data/mockDatabase';
 
 export const ProjectListModal = () => {
   const { openModal } = useModalStore();
   const setActiveProject = useMapStore((state) => state.setActiveProject);
   const activeProjectId = useMapStore((state) => state.activeProjectId);
+  const cameraStations = useMapStore((state) => state.cameraStations);
 
   const handleSelectProject = (id) => {
     setActiveProject(activeProjectId === id ? null : id);
@@ -34,7 +35,7 @@ export const ProjectListModal = () => {
           if (activeProjectId && !isActive) return null; // Oculta los demás si hay uno seleccionado
 
           // Calcular datos en vivo de la base de datos
-          const projectCameras = camera_stations.filter(c => c.project_id === proj.id);
+          const projectCameras = cameraStations.filter(c => c.project_id === proj.id);
           const cameraIds = projectCameras.map(c => c.id);
           const projectSightings = species.filter(s => cameraIds.includes(s.station_id));
           const investigator = users.find(u => u.id === proj.user_id);

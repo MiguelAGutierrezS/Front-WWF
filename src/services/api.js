@@ -173,3 +173,12 @@ export const getGremiosIndicator = async (params = {}) => {
   const { data } = await apiClient.get(`/reports/indicators/gremios${buildQs(params)}`);
   return data;
 };
+
+/** GET /camera-stations/
+ *  Response: Array of station objects
+ */
+export const getCameraStations = async ({ skip = 0, limit = 100 } = {}) => {
+  const { data } = await apiClient.get(`/camera-stations/?skip=${skip}&limit=${limit}`);
+  return data;
+};
+
