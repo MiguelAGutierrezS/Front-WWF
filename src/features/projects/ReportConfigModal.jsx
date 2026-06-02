@@ -56,15 +56,7 @@ export const ReportConfigModal = () => {
     }
   };
 
-  const isDateValid = localStartDate && localEndDate;
-
   const handleGenerate = () => {
-    if (!isDateValid) {
-      setErrorMsg('⚠️ Debes rellenar la Fecha Inicio y Fecha Fin de manera obligatoria para crear el reporte.');
-      // Scroll to top or just let them see the error at the bottom
-      return;
-    }
-    
     setErrorMsg('');
     setReportFilters({
       startDate: localStartDate || null,
@@ -151,7 +143,7 @@ export const ReportConfigModal = () => {
               />
             </div>
             <div className="flex-1 bg-white/5 p-3 rounded-xl border border-white/10">
-              <label className="block text-[10px] font-semibold text-gray-400 uppercase mb-1">Fecha Fin <span className="text-red-400">*</span></label>
+              <label className="block text-[10px] font-semibold text-gray-400 uppercase mb-1">Fecha Fin</label>
               <input 
                 type="date" 
                 value={localEndDate}

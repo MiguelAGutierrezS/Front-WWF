@@ -7,6 +7,12 @@ import {
   PieChart, Pie, Cell, BarChart, Bar 
 } from 'recharts';
 import { BiodiversityPanel } from './BiodiversityPanel';
+import { FileSpreadsheet, FileText } from 'lucide-react';
+import { jsPDF } from 'jspdf';
+import domtoimage from 'dom-to-image-more';
+import { 
+  getDiversityIndicator, getRaiIndicator, getOcupacionIndicator, getFrequencyIndicator
+} from '../../services/api';
 
 const COLORS = ['#eab308', '#f97316', '#3b82f6', '#22c55e', '#a855f7', '#ef4444', '#14b8a6'];
 
@@ -70,6 +76,152 @@ export const ProjectGiantModal = () => {
     return { investigator, projectCameras, projectSightings, speciesData, timelineData, frequencyData };
   }, [modalData, users, cameraStations, species]);
 
+  const handleExportPDF = async () => {
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'px',
+      format: 'a4',
+      hotfixes: ['px_scaling'],
+    });
+
+    const A4_WIDTH_PX = 794;
+    const A4_HEIGHT_PX = 1123;
+    const MARGIN = 40;
+    const CONTENT_WIDTH = A4_WIDTH_PX - (MARGIN * 2);
+
+    let currentY = MARGIN;
+
+    pdf.setFillColor(10, 10, 10);
+    pdf.rect(0, 0, A4_WIDTH_PX, A4_HEIGHT_PX, 'F');
+
+    pdf.setFontSize(24);
+    pdf.setTextColor(255, 255, 255);
+    pdf.text(modalData?.title || "Reporte del Proyecto", MARGIN, currentY);
+    currentY += 40;
+
+    const charts = document.querySelectorAll('.exportable-chart-giant');
+    
+    for (let i = 0; i < charts.length; i++) {
+      const chartElement = charts[i];
+      
+      if (chartElement.clientHeight < 50 || chartElement.innerText.toLowerCase().includes('error')) {
+         continue; 
+      }
+
+      chartElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+      await new Promise(r => setTimeout(r, 150));
+
+      const originalOverflow = chartElement.style.overflow;
+      chartElement.style.overflow = 'visible';
+
+      try {
+        const dataUrl = await domtoimage.toPng(chartElement, { bgcolor: '#111827' });
+        
+        chartElement.style.overflow = originalOverflow;
+        
+        const img = new Image();
+        img.src = dataUrl;
+        await new Promise((resolve) => { img.onload = resolve; });
+        
+        const ratio = img.height / img.width;
+        const imgWidth = CONTENT_WIDTH;
+        const imgHeight = CONTENT_WIDTH * ratio;
+
+        if (currentY + imgHeight > A4_HEIGHT_PX - MARGIN) {
+          pdf.addPage();
+          pdf.setFillColor(10, 10, 10);
+          pdf.rect(0, 0, A4_WIDTH_PX, A4_HEIGHT_PX, 'F');
+          currentY = MARGIN;
+        }
+
+        const title = chartElement.getAttribute('data-title');
+        if (title) {
+            pdf.setFontSize(16);
+            pdf.setTextColor(200, 200, 200);
+            pdf.text(title, MARGIN, currentY);
+            currentY += 20;
+        }
+
+        pdf.addImage(dataUrl, 'PNG', MARGIN, currentY, imgWidth, imgHeight);
+        currentY += imgHeight + 40;
+      } catch (err) {
+        console.error("Error capturando grafica", err);
+        chartElement.style.overflow = originalOverflow;
+      }
+    }
+
+    pdf.save(`reporte_${modalData?.title || 'proyecto'}.pdf`);
+  };
+
+  const handleExportCSV = async () => {
+    if (!modalData) return;
+    
+    try {
+      const params = { project_id: modalData.id };
+      let csvParts = [];
+      csvParts.push(`REPORTE DE DATOS - ${modalData.title}`);
+      csvParts.push("");
+
+      try {
+        const res = await getDiversityIndicator(params);
+        csvParts.push("--- INDICE DE BIODIVERSIDAD ---");
+        csvParts.push("Metrica,Bruto,Estadistico");
+        csvParts.push(`Riqueza Especies (S),${res?.bruto?.S || 0},${res?.estadistico?.S || 0}`);
+        csvParts.push(`Shannon (H'),${res?.bruto?.shannon || 0},${res?.estadistico?.shannon || 0}`);
+        csvParts.push(`Simpson (D),${res?.bruto?.simpson || 0},${res?.estadistico?.simpson || 0}`);
+        csvParts.push(`Dominante,${res?.bruto?.dominante || ''},${res?.estadistico?.dominante || ''}`);
+        csvParts.push("");
+      } catch(e) {}
+
+      try {
+        const res = await getRaiIndicator(params);
+        csvParts.push("--- TASA DE CAPTURA RELATIVA (RAI) ---");
+        csvParts.push("Especie,Eventos,RAI Bruto,RAI Estadistico");
+        if (res?.filas) {
+          res.filas.forEach(f => {
+            csvParts.push(`${f.especie},${f.eventos},${f.rai_bruto},${f.rai_estadistico}`);
+          });
+        }
+        csvParts.push("");
+      } catch(e) {}
+      
+      try {
+        const res = await getOcupacionIndicator(params);
+        csvParts.push("--- OCUPACION NAIVE ---");
+        csvParts.push("Especie,Estaciones Presente,Ocupacion %");
+        if (res?.filas) {
+          res.filas.forEach(f => {
+            csvParts.push(`${f.especie},${f.estaciones_presente},${f.ocupacion_pct}`);
+          });
+        }
+        csvParts.push("");
+      } catch(e) {}
+      
+      try {
+        const res = await getFrequencyIndicator(params);
+        csvParts.push("--- FRECUENCIA ---");
+        csvParts.push("Especie,Eventos,Porcentaje");
+        if (res?.filas) {
+          res.filas.forEach(f => {
+            csvParts.push(`${f.especie},${f.eventos},${f.porcentaje}`);
+          });
+        }
+        csvParts.push("");
+      } catch(e) {}
+      
+      const blob = new Blob([csvParts.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `datos_${modalData.title}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch(err) {
+      console.error(err);
+    }
+  };
+
   if (!modalData) return null;
 
   return (
@@ -87,12 +239,30 @@ export const ProjectGiantModal = () => {
           <h1 className="text-2xl font-extrabold text-white">{modalData.title}</h1>
           <p className="text-base text-gray-400 mt-1 max-w-4xl">{modalData.description}</p>
         </div>
-        <button onClick={handleCloseEntirely} className="text-white/40 hover:text-white p-2 bg-white/5 rounded-full cursor-pointer">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={handleExportCSV} 
+            className="flex items-center gap-2 bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 px-3 py-1.5 rounded-xl transition-colors font-bold cursor-pointer border border-blue-500/30 text-sm"
+            title="Descargar Datos en CSV"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            CSV
+          </button>
+          <button 
+            onClick={handleExportPDF} 
+            className="flex items-center gap-2 bg-green-500/20 hover:bg-green-500/40 text-green-400 px-3 py-1.5 rounded-xl transition-colors font-bold cursor-pointer border border-green-500/30 text-sm"
+            title="Exportar Reporte a PDF"
+          >
+            <FileText className="w-4 h-4" />
+            PDF
+          </button>
+          <button onClick={handleCloseEntirely} className="text-white/40 hover:text-white p-2 bg-white/5 rounded-full cursor-pointer transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-4 pr-3">
+      <div id="giant-report-content" className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-4 pr-3">
           
         {/* Columna Izquierda: Detalles del Proyecto */}
         <div className="w-full xl:w-1/3 space-y-3 shrink-0 sticky top-0 h-max z-10">
@@ -123,7 +293,7 @@ export const ProjectGiantModal = () => {
           {/* Fila 1: Linea de Tiempo y Frecuencia Horizontal */}
           <div className="flex flex-col xl:flex-row gap-4 w-full">
             {/* Grafica de Area */}
-            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
+            <div className="exportable-chart-giant bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]" data-title="Línea de Tiempo de Detecciones">
               <h3 className="text-sm font-bold text-white mb-1">Línea de Tiempo de Detecciones</h3>
               <div className="w-full" style={{ minHeight: '220px', height: '100%' }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -145,7 +315,7 @@ export const ProjectGiantModal = () => {
             </div>
 
             {/* Gráfica de Barras Horizontales (Frecuencia %) */}
-            <div className="bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]">
+            <div className="exportable-chart-giant bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]" data-title="Frecuencia por Animal (%)">
               <h3 className="text-sm font-bold text-white mb-1">Frecuencia por Animal (%)</h3>
               <div className="w-full" style={{ height: Math.max(220, frequencyData.length * 35) }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -164,7 +334,7 @@ export const ProjectGiantModal = () => {
             </div>
           </div>
 
-          <div className="flex flex-col xl:flex-row gap-4 w-full">
+          <div className="exportable-chart-giant flex flex-col xl:flex-row gap-4 w-full" data-title="Biodiversidad">
             <BiodiversityPanel sightings={projectSightings} />
           </div>
 
