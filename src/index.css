@@ -8,6 +8,10 @@
 }
 
 @layer base {
+  html {
+    /* Achica globalmente todos los rems de Tailwind ~19% (de 16px a 13px) */
+    font-size: 13px;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);

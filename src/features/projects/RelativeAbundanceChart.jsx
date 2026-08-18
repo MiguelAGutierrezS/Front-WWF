@@ -13,11 +13,11 @@ export const RelativeAbundanceChart = () => {
   }, []);
 
   return (
-    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex-1 flex flex-col w-full">
-      <h3 className="text-xl font-bold text-white mb-2">Índice de Abundancia Relativa (RAI)</h3>
-      <p className="text-sm text-gray-400 mb-6">Comparación entre RAI Bruto y RAI Estadístico basado en {datosRAI.parametros_globales.dias_trampa_total} días trampa.</p>
+    <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex-1 flex flex-col w-full">
+      <h3 className="text-base font-bold text-white mb-1">Índice de Abundancia Relativa (RAI)</h3>
+      <p className="text-xs text-gray-400 mb-4">Comparación entre RAI Bruto y RAI Estadístico basado en {datosRAI.parametros_globales.dias_trampa_total} días trampa.</p>
       
-      <div className="w-full" style={{ height: Math.max(500, chartData.length * 45) }}>
+      <div className="w-full" style={{ height: Math.max(400, chartData.length * 35) }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart 
             data={chartData} 
@@ -25,12 +25,12 @@ export const RelativeAbundanceChart = () => {
             margin={{ top: 0, right: 30, left: 40, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" horizontal={true} vertical={false}/>
-            <XAxis type="number" stroke="#ffffff80" fontSize={12} tickLine={false} axisLine={false} />
+            <XAxis type="number" stroke="#ffffff80" fontSize={10} tickLine={false} axisLine={false} />
             <YAxis 
               dataKey="especie" 
               type="category" 
               stroke="#ffffff" 
-              fontSize={14} 
+              fontSize={10} 
               width={100} 
               tickLine={false} 
               axisLine={false} 
@@ -43,8 +43,8 @@ export const RelativeAbundanceChart = () => {
               formatter={(value) => [`${value}`, '']}
             />
             <Legend wrapperStyle={{ paddingTop: '20px' }} />
-            <Bar dataKey="RAI Bruto" fill="#1e3a8a" radius={[0, 4, 4, 0]} barSize={12} />
-            <Bar dataKey="RAI Estadístico" fill="#f97316" radius={[0, 4, 4, 0]} barSize={12} />
+            <Bar dataKey="RAI Bruto" fill="#1e3a8a" radius={[0, 4, 4, 0]} barSize={10} />
+            <Bar dataKey="RAI Estadístico" fill="#f97316" radius={[0, 4, 4, 0]} barSize={10} />
           </BarChart>
         </ResponsiveContainer>
       </div>

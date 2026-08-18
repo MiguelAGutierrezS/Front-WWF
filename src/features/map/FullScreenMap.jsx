@@ -2,7 +2,8 @@ import React, { useEffect, useMemo } from 'react';
 import { APIProvider, Map, AdvancedMarker, useMap } from '@vis.gl/react-google-maps';
 import { useMapStore } from '../../store/useMapStore';
 import { useModalStore } from '../../store/useModalStore';
-import { camera_stations, species } from '../../data/mockDatabase';
+import { getCameraStations, getProjects, getUsers, getSpecies } from '../../services/api';
+import { camera_stations as fallbackCameraStations, species as fallbackSpecies } from '../../data/mockDatabase';
 import { MapSelectionLayer } from './MapSelectionLayer';
 import { AreaActionPopup } from './AreaActionPopup';
 import { ScanEye } from 'lucide-react';
@@ -10,11 +11,13 @@ import { ScanEye } from 'lucide-react';
 const MapController = () => {
   const map = useMap();
   const activeProjectId = useMapStore((state) => state.activeProjectId);
+  const cameraStations = useMapStore((state) => state.cameraStations);
+  const effectiveStations = (cameraStations && cameraStations.length > 0) ? cameraStations : fallbackCameraStations;
 
   useEffect(() => {
-    if (map && activeProjectId) {
+    if (map && activeProjectId && effectiveStations.length > 0) {
       // Filtrar las cámaras de este proyecto para calcular el centro
-      const projectCameras = camera_stations.filter(c => c.project_id === activeProjectId);
+      const projectCameras = effectiveStations.filter(c => c.project_id === activeProjectId);
       
       if (projectCameras.length > 0) {
         const avgLat = projectCameras.reduce((acc, c) => acc + c.latitude, 0) / projectCameras.length;
@@ -24,7 +27,7 @@ const MapController = () => {
         map.setZoom(12);
       }
     }
-  }, [map, activeProjectId]);
+  }, [map, activeProjectId, effectiveStations]);
 
   return null;
 };
@@ -32,15 +35,69 @@ const MapController = () => {
 export const FullScreenMap = () => {
   const activeProjectId = useMapStore((state) => state.activeProjectId);
   const selectedCameraIds = useMapStore((state) => state.selectedCameraIds);
+  const cameraStations = useMapStore((state) => state.cameraStations);
+  const setCameraStations = useMapStore((state) => state.setCameraStations);
+  
+  const setProjects = useMapStore((state) => state.setProjects);
+  const setUsers = useMapStore((state) => state.setUsers);
+  const species = useMapStore((state) => state.species);
+  const setSpecies = useMapStore((state) => state.setSpecies);
+  
   const globalCameraFilters = useMapStore((state) => state.globalCameraFilters);
   const openModal = useModalStore((state) => state.openModal);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   console.log(apiKey)
 
+  // Fetch all live data from endpoint without wiping out fallbacks if empty/failed
+  useEffect(() => {
+    const loadAllData = async () => {
+      try {
+        const [camsData, projectsData, usersData, speciesData] = await Promise.all([
+          getCameraStations({ skip: 0, limit: 100 }).catch(e => { console.warn('Cams endpoint not reachable:', e); return null; }),
+          getProjects({ skip: 0, limit: 100 }).catch(e => { console.warn('Projects endpoint not reachable:', e); return null; }),
+          getUsers({ skip: 0, limit: 100 }).catch(e => { console.warn('Users endpoint not reachable:', e); return null; }),
+          getSpecies({ skip: 0, limit: 1000 }).catch(e => { console.warn('Species endpoint not reachable:', e); return null; })
+        ]);
+        
+        if (camsData && Array.isArray(camsData) && camsData.length > 0) {
+          const parsedCams = camsData.map(s => ({
+            ...s,
+            latitude: parseFloat(s.latitude),
+            longitude: parseFloat(s.longitude)
+          }));
+          setCameraStations(parsedCams);
+        }
+        
+        if (projectsData && Array.isArray(projectsData) && projectsData.length > 0) {
+          setProjects(projectsData);
+        }
+        
+        if (usersData && Array.isArray(usersData) && usersData.length > 0) {
+          setUsers(usersData);
+        }
+        
+        if (speciesData && Array.isArray(speciesData) && speciesData.length > 0) {
+          setSpecies(speciesData);
+        }
+      } catch (err) {
+        console.error('Error loading API data:', err);
+      }
+    };
+    loadAllData();
+  }, [setCameraStations, setProjects, setUsers, setSpecies]);
+
+  const effectiveStations = useMemo(() => {
+    return (cameraStations && cameraStations.length > 0) ? cameraStations : fallbackCameraStations;
+  }, [cameraStations]);
+
+  const effectiveSpecies = useMemo(() => {
+    return (species && species.length > 0) ? species : fallbackSpecies;
+  }, [species]);
+
   const filteredStations = useMemo(() => {
-    return camera_stations.filter(cam => {
+    return effectiveStations.filter(cam => {
       // 1. Get sightings for this camera
-      let camSightings = species.filter(s => s.station_id === cam.id);
+      let camSightings = effectiveSpecies.filter(s => s.station_id === cam.id);
       
       // 2. Filter by Species if any selected
       if (globalCameraFilters?.selectedSpecies?.length > 0) {
@@ -53,7 +110,6 @@ export const FullScreenMap = () => {
       let endTime = null;
       
       if (globalCameraFilters?.dateStart) {
-        // Need to handle timezone slightly carefully, but generic JS Date is fine for mock
         startTime = new Date(globalCameraFilters.dateStart).getTime();
       }
       if (globalCameraFilters?.dateEnd) {
@@ -87,11 +143,15 @@ export const FullScreenMap = () => {
       
       return true;
     });
-  }, [globalCameraFilters]);
+  }, [effectiveStations, globalCameraFilters, effectiveSpecies]);
 
   return (
     <div className="absolute inset-0 z-0 bg-gray-900">
-      <APIProvider apiKey={apiKey} libraries={['drawing']}>
+      <APIProvider 
+        apiKey={apiKey} 
+        version="3.64" 
+        libraries={['drawing']}
+      >
         <Map
           defaultCenter={{ lat: -10.0, lng: -65.0 }}
           defaultZoom={4}

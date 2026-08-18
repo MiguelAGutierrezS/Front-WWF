@@ -10,7 +10,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
 
   return (
-    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontWeight="bold">
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontWeight="bold" fontSize={10}>
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
@@ -18,11 +18,11 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 
 export const TrophicGuildChart = () => {
   return (
-    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex-1 flex flex-col w-full min-w-[300px]">
-      <h3 className="text-xl font-bold text-white mb-2 text-center">S (especies)</h3>
-      <p className="text-sm text-gray-400 mb-4 text-center">Proporción de especies por Gremio Trófico</p>
+    <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex-1 flex flex-col w-full min-w-[300px]">
+      <h3 className="text-base font-bold text-white mb-1 text-center">Estructura de gremio troficos</h3>
+      <p className="text-xs text-gray-400 mb-3 text-center">Proporción de especies por Gremio Trófico</p>
       
-      <div className="w-full h-[350px]">
+      <div className="w-full h-[250px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -31,7 +31,7 @@ export const TrophicGuildChart = () => {
               cy="50%"
               labelLine={false}
               label={renderCustomizedLabel}
-              outerRadius={120}
+              outerRadius={90}
               dataKey="s_especies"
               nameKey="gremio"
             >
@@ -45,8 +45,8 @@ export const TrophicGuildChart = () => {
               formatter={(value, name) => [`${value} especies`, name.charAt(0).toUpperCase() + name.slice(1)]}
             />
             <Legend 
-              wrapperStyle={{ paddingTop: '20px' }} 
-              formatter={(value) => <span className="capitalize text-white font-medium">{value}</span>}
+              wrapperStyle={{ paddingTop: '10px' }} 
+              formatter={(value) => <span className="capitalize text-white text-xs font-medium">{value}</span>}
             />
           </PieChart>
         </ResponsiveContainer>

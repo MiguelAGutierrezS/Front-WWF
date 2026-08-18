@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { Camera, Save, Video } from 'lucide-react';
-import { projects, users } from '../../data/mockDatabase';
+import { useUserStore } from '../../store/useUserStore';
+import { useProjectStore } from '../../store/useProjectStore';
 
 export const CreateStationModal = () => {
   const { closeModal } = useModalStore();
+  const users = useUserStore(state => state.users);
+  const projects = useProjectStore(state => state.projects);
   
-  // Simulamos que el usuario logueado es el primero (Dra. Elena Silva - uuid-u1)
-  const currentUser = users[0];
+  // Simulamos que el usuario logueado es el primero
+  const currentUser = users[0] || { id: 'uuid-unknown', full_name: 'Usuario' };
   const userProjects = projects.filter(p => p.user_id === currentUser.id);
 
   const [formData, setFormData] = useState({

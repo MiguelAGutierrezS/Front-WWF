@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { useMapStore } from '../../store/useMapStore';
-import { camera_stations } from '../../data/mockDatabase';
 
 // Utility to calculate distance between points (Haversine formula approximation)
 const getDistance = (p1, p2) => {
@@ -22,7 +21,7 @@ const getDistance = (p1, p2) => {
 export const MapSelectionLayer = () => {
   const map = useMap();
   const drawing = useMapsLibrary('drawing');
-  const { drawingMode, selectionShape, setSelectionShape, setSelectedCameraIds, setDrawingMode } = useMapStore();
+  const { drawingMode, selectionShape, setSelectionShape, setSelectedCameraIds, setDrawingMode, cameraStations } = useMapStore();
   const managerRef = useRef(null);
   const shapeRef = useRef(null);
 
@@ -34,7 +33,7 @@ export const MapSelectionLayer = () => {
     }
 
     const capturedIds = [];
-    camera_stations.forEach(cam => {
+    cameraStations.forEach(cam => {
       const p = { lat: cam.latitude, lng: cam.longitude };
       if (selectionShape.type === 'circle') {
         const dist = getDistance(selectionShape.center, p);
@@ -48,7 +47,7 @@ export const MapSelectionLayer = () => {
     });
 
     setSelectedCameraIds(capturedIds);
-  }, [selectionShape, setSelectedCameraIds]);
+  }, [selectionShape, setSelectedCameraIds, cameraStations]);
 
   // Initialize Drawing Manager
   useEffect(() => {
