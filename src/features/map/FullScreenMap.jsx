@@ -3,6 +3,7 @@ import { APIProvider, Map, AdvancedMarker, useMap } from '@vis.gl/react-google-m
 import { useMapStore } from '../../store/useMapStore';
 import { useModalStore } from '../../store/useModalStore';
 import { getCameraStations, getProjects, getUsers, getSpecies } from '../../services/api';
+import { camera_stations as fallbackCameraStations, species as fallbackSpecies } from '../../data/mockDatabase';
 import { MapSelectionLayer } from './MapSelectionLayer';
 import { AreaActionPopup } from './AreaActionPopup';
 import { ScanEye } from 'lucide-react';
@@ -11,11 +12,12 @@ const MapController = () => {
   const map = useMap();
   const activeProjectId = useMapStore((state) => state.activeProjectId);
   const cameraStations = useMapStore((state) => state.cameraStations);
+  const effectiveStations = (cameraStations && cameraStations.length > 0) ? cameraStations : fallbackCameraStations;
 
   useEffect(() => {
-    if (map && activeProjectId && cameraStations.length > 0) {
+    if (map && activeProjectId && effectiveStations.length > 0) {
       // Filtrar las cámaras de este proyecto para calcular el centro
-      const projectCameras = cameraStations.filter(c => c.project_id === activeProjectId);
+      const projectCameras = effectiveStations.filter(c => c.project_id === activeProjectId);
       
       if (projectCameras.length > 0) {
         const avgLat = projectCameras.reduce((acc, c) => acc + c.latitude, 0) / projectCameras.length;
@@ -25,7 +27,7 @@ const MapController = () => {
         map.setZoom(12);
       }
     }
-  }, [map, activeProjectId, cameraStations]);
+  }, [map, activeProjectId, effectiveStations]);
 
   return null;
 };
@@ -44,27 +46,37 @@ export const FullScreenMap = () => {
   const globalCameraFilters = useMapStore((state) => state.globalCameraFilters);
   const openModal = useModalStore((state) => state.openModal);
 
-  // Fetch all live data from endpoint
+  // Fetch all live data from endpoint without wiping out fallbacks if empty/failed
   useEffect(() => {
     const loadAllData = async () => {
       try {
         const [camsData, projectsData, usersData, speciesData] = await Promise.all([
-          getCameraStations({ skip: 0, limit: 100 }).catch(e => { console.error('Cams failed', e); return []; }),
-          getProjects({ skip: 0, limit: 100 }).catch(e => { console.error('Projects failed', e); return []; }),
-          getUsers({ skip: 0, limit: 100 }).catch(e => { console.error('Users failed', e); return []; }),
-          getSpecies({ skip: 0, limit: 1000 }).catch(e => { console.error('Species failed', e); return []; })
+          getCameraStations({ skip: 0, limit: 100 }).catch(e => { console.warn('Cams endpoint not reachable:', e); return null; }),
+          getProjects({ skip: 0, limit: 100 }).catch(e => { console.warn('Projects endpoint not reachable:', e); return null; }),
+          getUsers({ skip: 0, limit: 100 }).catch(e => { console.warn('Users endpoint not reachable:', e); return null; }),
+          getSpecies({ skip: 0, limit: 1000 }).catch(e => { console.warn('Species endpoint not reachable:', e); return null; })
         ]);
         
-        const parsedCams = camsData.map(s => ({
-          ...s,
-          latitude: parseFloat(s.latitude),
-          longitude: parseFloat(s.longitude)
-        }));
+        if (camsData && Array.isArray(camsData) && camsData.length > 0) {
+          const parsedCams = camsData.map(s => ({
+            ...s,
+            latitude: parseFloat(s.latitude),
+            longitude: parseFloat(s.longitude)
+          }));
+          setCameraStations(parsedCams);
+        }
         
-        setCameraStations(parsedCams);
-        setProjects(projectsData);
-        setUsers(usersData);
-        setSpecies(speciesData);
+        if (projectsData && Array.isArray(projectsData) && projectsData.length > 0) {
+          setProjects(projectsData);
+        }
+        
+        if (usersData && Array.isArray(usersData) && usersData.length > 0) {
+          setUsers(usersData);
+        }
+        
+        if (speciesData && Array.isArray(speciesData) && speciesData.length > 0) {
+          setSpecies(speciesData);
+        }
       } catch (err) {
         console.error('Error loading API data:', err);
       }
@@ -72,10 +84,18 @@ export const FullScreenMap = () => {
     loadAllData();
   }, [setCameraStations, setProjects, setUsers, setSpecies]);
 
+  const effectiveStations = useMemo(() => {
+    return (cameraStations && cameraStations.length > 0) ? cameraStations : fallbackCameraStations;
+  }, [cameraStations]);
+
+  const effectiveSpecies = useMemo(() => {
+    return (species && species.length > 0) ? species : fallbackSpecies;
+  }, [species]);
+
   const filteredStations = useMemo(() => {
-    return cameraStations.filter(cam => {
+    return effectiveStations.filter(cam => {
       // 1. Get sightings for this camera
-      let camSightings = species.filter(s => s.station_id === cam.id);
+      let camSightings = effectiveSpecies.filter(s => s.station_id === cam.id);
       
       // 2. Filter by Species if any selected
       if (globalCameraFilters?.selectedSpecies?.length > 0) {
@@ -121,7 +141,7 @@ export const FullScreenMap = () => {
       
       return true;
     });
-  }, [cameraStations, globalCameraFilters, species]);
+  }, [effectiveStations, globalCameraFilters, effectiveSpecies]);
 
   return (
     <div className="absolute inset-0 z-0 bg-gray-900">

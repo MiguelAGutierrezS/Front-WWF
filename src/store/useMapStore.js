@@ -1,12 +1,13 @@
 import { create } from 'zustand';
+import { camera_stations as defaultCameraStations, species as defaultSpecies, projects as defaultProjects, users as defaultUsers } from '../data/mockDatabase';
 
 export const useMapStore = create((set) => ({
   mode: 'cameras', // 'cameras'
   activeProjectId: null,
-  cameraStations: [], // dynamically loaded camera stations
-  projects: [], // dynamically loaded projects
-  users: [], // dynamically loaded users
-  species: [], // dynamically loaded species sightings
+  cameraStations: defaultCameraStations, // estaciones iniciales (fallback asegurado)
+  projects: defaultProjects, // proyectos iniciales (fallback asegurado)
+  users: defaultUsers, // usuarios iniciales (fallback asegurado)
+  species: defaultSpecies, // avistamientos iniciales (fallback asegurado)
   drawingMode: null, // 'circle' | 'rectangle' | null
   selectionShape: null, // the active shape bounds/coords
   selectedCameraIds: [], // cameras captured by the shape
