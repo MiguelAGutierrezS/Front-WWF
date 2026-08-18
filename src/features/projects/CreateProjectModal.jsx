@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
+import { useUserStore } from '../../store/useUserStore';
+import { useProjectStore } from '../../store/useProjectStore';
 import { Map as MapIcon, Save } from 'lucide-react';
 
 export const CreateProjectModal = () => {
   const { closeModal } = useModalStore();
+  const users = useUserStore(state => state.users);
+  const { addProject, isLoading, error } = useProjectStore();
   
+  // Simulamos que el usuario logueado es el primero
+  const currentUser = users[0] || { id: null, full_name: 'Cargando...' };
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     objectives: '',
     expected_results: '',
-    status: 'private'
+    status: 'public',
+    colaborators: []
   });
 
   const handleChange = (e) => {
@@ -19,11 +27,24 @@ export const CreateProjectModal = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Guardando nuevo proyecto:', formData);
-    // Aquí iría la lógica de mutación de backend
-    closeModal();
+    if (!currentUser.id) return;
+    
+    try {
+      await addProject({
+        title: formData.title,
+        description: formData.description || null,
+        objectives: formData.objectives || null,
+        expected_results: formData.expected_results || null,
+        status: formData.status,
+        colaborators: formData.colaborators,
+        user_id: currentUser.id,
+      }, currentUser.id);
+      closeModal();
+    } catch (err) {
+      console.error('Error al crear proyecto:', err);
+    }
   };
 
   return (
@@ -36,11 +57,18 @@ export const CreateProjectModal = () => {
           </div>
           <h2 className="text-3xl font-extrabold text-white">Crear Proyecto</h2>
           <p className="text-gray-400 mt-2">Define los parámetros de un nuevo proyecto de conservación en la plataforma.</p>
+          <p className="text-xs text-gray-500 mt-1">Creando como: <span className="text-primary font-bold">{currentUser.full_name}</span></p>
         </div>
         <button onClick={closeModal} className="text-white/40 hover:text-white p-2 bg-white/5 rounded-full cursor-pointer transition-colors">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
+
+      {error && (
+        <div className="bg-red-500/20 border border-red-500/50 text-red-200 p-3 rounded-lg mb-4 text-sm">
+          {error}
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
         <form id="create-project-form" onSubmit={handleSubmit} className="space-y-6">
@@ -59,10 +87,9 @@ export const CreateProjectModal = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-400 uppercase mb-2">Descripción General *</label>
+            <label className="block text-sm font-bold text-gray-400 uppercase mb-2">Descripción General</label>
             <textarea 
               name="description"
-              required
               rows={3}
               value={formData.description}
               onChange={handleChange}
@@ -72,10 +99,9 @@ export const CreateProjectModal = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-400 uppercase mb-2">Objetivos Específicos *</label>
+            <label className="block text-sm font-bold text-gray-400 uppercase mb-2">Objetivos Específicos</label>
             <textarea 
               name="objectives"
-              required
               rows={2}
               value={formData.objectives}
               onChange={handleChange}
@@ -123,10 +149,11 @@ export const CreateProjectModal = () => {
         <button 
           type="submit"
           form="create-project-form"
-          className="px-8 py-3 bg-blue-500 hover:bg-blue-400 text-white rounded-xl font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all hover:scale-105 flex items-center gap-2 cursor-pointer"
+          disabled={isLoading || !currentUser.id}
+          className="px-8 py-3 bg-blue-500 hover:bg-blue-400 text-white rounded-xl font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all hover:scale-105 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Save className="w-5 h-5" />
-          Guardar Proyecto
+          {isLoading ? 'Guardando...' : 'Guardar Proyecto'}
         </button>
       </div>
     </FloatingPanel>

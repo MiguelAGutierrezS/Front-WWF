@@ -8,6 +8,7 @@ import { CustomReportModal } from '../features/projects/CustomReportModal';
 import { ReportConfigModal } from '../features/projects/ReportConfigModal';
 import { CreateProjectModal } from '../features/projects/CreateProjectModal';
 import { CreateStationModal } from '../features/cameras/CreateStationModal';
+import { UserManagerModal } from '../features/users/UserManagerModal';
 import { CreationFAB } from '../features/map/CreationFAB';
 import { FilterPanel } from '../features/map/FilterPanel';
 import { AreaSelectorToolbar } from '../features/map/AreaSelectorToolbar';
@@ -125,6 +126,11 @@ export const MainMapLayout = () => {
          {activeModal === 'createStation' && (
            <div className="absolute inset-0 pointer-events-auto z-[60] animate-in fade-in zoom-in-95 duration-300">
               <CreateStationModal />
+           </div>
+         )}
+         {activeModal === 'userManager' && (
+           <div className="absolute inset-0 pointer-events-auto z-[60] animate-in fade-in zoom-in-95 duration-300">
+              <UserManagerModal />
            </div>
          )}
       </div>

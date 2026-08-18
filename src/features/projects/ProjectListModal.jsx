@@ -3,7 +3,6 @@ import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
 import { Button } from '../../components/ui/Button';
-
 export const ProjectListModal = () => {
   const { openModal } = useModalStore();
   const setActiveProject = useMapStore((state) => state.setActiveProject);
@@ -32,9 +31,13 @@ export const ProjectListModal = () => {
           </p>
         )}
 
+        {projects.length === 0 && (
+          <p className="text-sm text-gray-500 text-center py-8">No hay proyectos registrados.</p>
+        )}
+
         {projects.map((proj) => {
           const isActive = activeProjectId === proj.id;
-          if (activeProjectId && !isActive) return null; // Oculta los demás si hay uno seleccionado
+          if (activeProjectId && !isActive) return null;
 
           // Calcular datos en vivo de la base de datos
           const projectCameras = cameraStations.filter(c => c.project_id === proj.id);
@@ -57,7 +60,7 @@ export const ProjectListModal = () => {
               
               {!isActive && (
                 <div className="text-sm text-primary font-semibold">
-                  {projectCameras.length} cámaras • {projectSightings.length} detecciones
+                  {projectCameras.length} cámaras
                 </div>
               )}
 
@@ -66,8 +69,8 @@ export const ProjectListModal = () => {
                   <h5 className="font-bold text-white/90 mb-2 text-lg">Puntos Relevantes:</h5>
                   <ul className="list-disc pl-5 space-y-2 text-base text-gray-400 mb-6">
                     <li><strong className="text-white/80">Cámaras Instaladas:</strong> {projectCameras.length} unidades</li>
-                    <li><strong className="text-white/80">Avistamientos Registrados:</strong> {projectSightings.length} animales</li>
-                    <li><strong className="text-white/80">Investigador Principal:</strong> {investigator?.full_name}</li>
+                    <li><strong className="text-white/80">Estado:</strong> {proj.status}</li>
+                    <li><strong className="text-white/80">Investigador Principal:</strong> {investigator?.full_name || 'No asignado'}</li>
                   </ul>
                   
                   <div className="flex gap-3 mb-4">

@@ -32,7 +32,7 @@ export const ProjectGiantModal = () => {
     closeModal();
   };
 
-  // Calcular datos dinámicos basados en la DB simulada
+  // Calcular datos dinámicos — camera_stations viene del backend (por ahora [])
   const { investigator, projectCameras, projectSightings, speciesData, timelineData, frequencyData } = useMemo(() => {
     if (!modalData) return {};
     
@@ -41,37 +41,9 @@ export const ProjectGiantModal = () => {
     const cameraIds = projectCameras.map(c => c.id);
     const projectSightings = species.filter(s => cameraIds.includes(s.station_id));
 
-    // 1. Agrupar por especie (Pie Chart)
-    const speciesCounts = {};
-    projectSightings.forEach(s => {
-      speciesCounts[s.common_name] = (speciesCounts[s.common_name] || 0) + 1;
-    });
-    const speciesData = Object.entries(speciesCounts)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value);
-
-    // 2. Agrupar frecuencias para el gráfico de barras (Frecuencia %)
-    const totalSightings = projectSightings.length || 1;
-    const frequencyData = speciesData.map(item => ({
-      name: item.name,
-      porcentaje: parseFloat(((item.value / totalSightings) * 100).toFixed(1))
-    }));
-
-    // 3. Agrupar línea de tiempo (por mes)
-    const timelineCounts = {};
-    projectSightings.forEach(s => {
-      const date = new Date(s.detection_timestamp);
-      // Formato 'YYYY-MM'
-      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-      timelineCounts[monthKey] = (timelineCounts[monthKey] || 0) + 1;
-    });
-    
-    const timelineData = Object.entries(timelineCounts)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([month, avistamientos]) => ({
-        month, // Podría formatearse a 'Ene', 'Feb' si es del mismo año, pero YYYY-MM es seguro
-        avistamientos
-      }));
+    const speciesData = [];
+    const frequencyData = [];
+    const timelineData = [];
 
     return { investigator, projectCameras, projectSightings, speciesData, timelineData, frequencyData };
   }, [modalData, users, cameraStations, species]);
@@ -226,13 +198,13 @@ export const ProjectGiantModal = () => {
 
   return (
     <FloatingPanel 
-      className="w-full h-full p-3 md:p-4 bg-black/95 backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10"
+      className="w-[90%] max-w-6xl max-h-[90vh] mx-auto mt-[5vh] p-4 bg-black/95 backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10 shadow-2xl"
     >
       <div className="flex justify-between items-start border-b border-white/10 pb-3 mb-3">
         <div>
           <button 
             onClick={handleBack} 
-            className="text-primary hover:text-white mb-2 font-medium text-sm flex items-center cursor-pointer transition-colors"
+            className="text-primary hover:text-white mb-1 font-medium text-sm flex items-center cursor-pointer transition-colors"
           >
             ← Volver a Resumen
           </button>
@@ -265,33 +237,33 @@ export const ProjectGiantModal = () => {
       <div id="giant-report-content" className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-4 pr-3">
           
         {/* Columna Izquierda: Detalles del Proyecto */}
-        <div className="w-full xl:w-1/3 space-y-3 shrink-0 sticky top-0 h-max z-10">
-          <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
-            <h3 className="text-xl font-bold text-white mb-3">Información Clave</h3>
-            <ul className="space-y-3 text-base text-gray-300">
+        <div className="w-full xl:w-1/3 space-y-3 shrink-0">
+          <div className="bg-white/5 p-3 rounded-2xl border border-white/10">
+            <h3 className="text-lg font-bold text-white mb-2">Información Clave</h3>
+            <ul className="space-y-2 text-sm text-gray-300">
               <li><strong className="text-white">Investigador Principal:</strong> {investigator?.full_name} ({investigator?.institucion})</li>
               <li><strong className="text-white">Cámaras Activas:</strong> {projectCameras?.length} unidades</li>
               <li><strong className="text-white">Avistamientos Totales:</strong> {projectSightings?.length} registros IA</li>
             </ul>
           </div>
           
-          <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
-            <h3 className="text-xl font-bold text-white mb-3">Objetivos del Proyecto</h3>
-            <p className="text-base text-gray-300 leading-relaxed mb-4">
+          <div className="bg-white/5 p-3 rounded-2xl border border-white/10">
+            <h3 className="text-lg font-bold text-white mb-2">Objetivos del Proyecto</h3>
+            <p className="text-sm text-gray-300 leading-relaxed mb-3">
               {modalData.objectives}
             </p>
-            <h4 className="text-lg font-bold text-white mb-2">Resultados Esperados</h4>
-            <p className="text-base text-gray-300 leading-relaxed">
+            <h4 className="text-base font-bold text-white mb-1">Resultados Esperados</h4>
+            <p className="text-sm text-gray-300 leading-relaxed">
               {modalData.expected_results}
             </p>
           </div>
         </div>
 
         {/* Columnas Derecha: Gráficas */}
-        <div className="w-full xl:w-2/3 flex flex-col gap-4 pb-8">
+        <div className="w-full xl:w-2/3 flex flex-col gap-3 pb-8">
           
           {/* Fila 1: Linea de Tiempo y Frecuencia Horizontal */}
-          <div className="flex flex-col xl:flex-row gap-4 w-full">
+          <div className="flex flex-col xl:flex-row gap-3 w-full">
             {/* Grafica de Area */}
             <div className="exportable-chart-giant bg-white/5 p-2 rounded-2xl border border-white/10 flex-1 flex flex-col min-w-[300px]" data-title="Línea de Tiempo de Detecciones">
               <h3 className="text-sm font-bold text-white mb-1">Línea de Tiempo de Detecciones</h3>
@@ -304,8 +276,8 @@ export const ProjectGiantModal = () => {
                         <stop offset="95%" stopColor="#00ff88" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <XAxis dataKey="month" stroke="#ffffff80" fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#ffffff80" fontSize={9} tickLine={false} axisLine={false} />
+                    <XAxis dataKey="month" stroke="#ffffff80" fontSize={10} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#ffffff80" fontSize={10} tickLine={false} axisLine={false} />
                     <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" vertical={false} />
                     <Tooltip contentStyle={{ backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}/>
                     <Area type="monotone" dataKey="avistamientos" stroke="#00ff88" strokeWidth={3} fillOpacity={1} fill="url(#colorUv)" />

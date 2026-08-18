@@ -125,7 +125,11 @@ export const FullScreenMap = () => {
 
   return (
     <div className="absolute inset-0 z-0 bg-gray-900">
-      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''} libraries={['drawing']}>
+      <APIProvider 
+        apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''} 
+        version="3.64" 
+        libraries={['drawing']}
+      >
         <Map
           defaultCenter={{ lat: -10.0, lng: -65.0 }}
           defaultZoom={4}
