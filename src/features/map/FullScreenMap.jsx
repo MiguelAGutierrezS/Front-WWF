@@ -34,6 +34,8 @@ export const FullScreenMap = () => {
   const selectedCameraIds = useMapStore((state) => state.selectedCameraIds);
   const globalCameraFilters = useMapStore((state) => state.globalCameraFilters);
   const openModal = useModalStore((state) => state.openModal);
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  console.log(apiKey)
 
   const filteredStations = useMemo(() => {
     return camera_stations.filter(cam => {
@@ -89,7 +91,7 @@ export const FullScreenMap = () => {
 
   return (
     <div className="absolute inset-0 z-0 bg-gray-900">
-      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''} libraries={['drawing']}>
+      <APIProvider apiKey={apiKey} libraries={['drawing']}>
         <Map
           defaultCenter={{ lat: -10.0, lng: -65.0 }}
           defaultZoom={4}
