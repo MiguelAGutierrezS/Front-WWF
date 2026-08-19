@@ -46,7 +46,7 @@ export const FullScreenMap = () => {
   const globalCameraFilters = useMapStore((state) => state.globalCameraFilters);
   const openModal = useModalStore((state) => state.openModal);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  console.log(apiKey)
+
 
   // Fetch all live data from endpoint without wiping out fallbacks if empty/failed
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { motion } from 'framer-motion';
 
 /** Utility to merge tailwind classes */
 export function cn(...inputs) {
@@ -9,11 +10,16 @@ export function cn(...inputs) {
 
 export const FloatingPanel = ({ children, className, title, onClose }) => {
   return (
-    <div className={cn(
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      className={cn(
       "pointer-events-auto",
       "bg-background/85 backdrop-blur-xl border border-white/10",
       "rounded-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]",
-      "p-5 flex flex-col gap-4 text-foreground transition-all duration-300",
+      "p-5 flex flex-col gap-4 text-foreground",
       className
     )}>
       {title && (
@@ -30,6 +36,6 @@ export const FloatingPanel = ({ children, className, title, onClose }) => {
         </div>
       )}
       {children}
-    </div>
+    </motion.div>
   );
 };

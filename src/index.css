@@ -5,6 +5,13 @@
   --color-foreground: hsl(0, 0%, 100%);
   --color-primary: hsl(160, 100%, 30%);
   --color-primary-foreground: hsl(0, 0%, 100%);
+
+  --animate-shimmer: shimmer 1.5s infinite;
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 @layer base {

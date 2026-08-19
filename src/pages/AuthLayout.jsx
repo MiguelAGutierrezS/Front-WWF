@@ -1,10 +1,63 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader } from 'lucide-react';
+import { authService } from '../services/authService';
+import { userService } from '../services/userService';
+import { useAuthStore } from '../store/useAuthStore';
 
 export const AuthLayout = () => {
+  const navigate = useNavigate();
+  const { setSession } = useAuthStore();
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  
+  const [formData, setFormData] = useState({
+    full_name: '',
+    email: '',
+    password: '',
+    institucion: '',
+    sexo: 'O'
+  });
+
+  const handleChange = (e) => {
+    setFormData(prev => ({...prev, [e.target.name]: e.target.value}));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg('');
+
+    try {
+      let authResponse;
+      if (isLogin) {
+        authResponse = await authService.login({ email: formData.email, password: formData.password });
+      } else {
+        authResponse = await authService.register(formData);
+      }
+
+      const { user, tokens } = authResponse.data || authResponse;
+      setSession(user, tokens);
+
+      // Claim anonymous data
+      const anonId = localStorage.getItem('wwf_anon_session_id');
+      if (anonId) {
+        try {
+          await userService.claimAnonSession(anonId);
+        } catch (claimErr) {
+          console.warn('Could not claim anonymous data', claimErr);
+        }
+      }
+
+      navigate('/');
+    } catch (err) {
+      setErrorMsg(err.message || 'Error en la autenticación. Verifica tus datos.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-gray-900 flex items-center justify-center relative overflow-hidden bg-[url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=2000')] bg-cover bg-center">
@@ -31,12 +84,22 @@ export const AuthLayout = () => {
           </p>
         </div>
 
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          {errorMsg && (
+            <div className="bg-red-500/20 border border-red-500/30 text-red-400 p-3 rounded-lg text-sm text-center">
+              {errorMsg}
+            </div>
+          )}
+
           {!isLogin && (
             <div>
               <label className="block text-white/70 text-xs font-semibold mb-1 uppercase tracking-wider">Nombre Completo</label>
               <input 
                 type="text" 
+                name="full_name"
+                value={formData.full_name}
+                onChange={handleChange}
+                required
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-text"
                 placeholder="Ej. Jane Goodall"
               />
@@ -47,6 +110,10 @@ export const AuthLayout = () => {
             <label className="block text-white/70 text-xs font-semibold mb-1 uppercase tracking-wider">Correo Electrónico</label>
             <input 
               type="email" 
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-text"
               placeholder="investigador@wwf.org"
             />
@@ -56,13 +123,17 @@ export const AuthLayout = () => {
             <label className="block text-white/70 text-xs font-semibold mb-1 uppercase tracking-wider">Contraseña</label>
             <input 
               type="password" 
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-text"
               placeholder="••••••••"
             />
           </div>
 
-          <Button variant="primary" className="w-full py-3 mt-4 text-lg font-bold bg-[#00ff88] text-black hover:bg-[#00cc6a] shadow-[0_0_15px_rgba(0,255,136,0.3)] cursor-pointer">
-            {isLogin ? 'Ingresar' : 'Registrarse'}
+          <Button type="submit" disabled={loading} variant="primary" className="w-full py-3 mt-4 text-lg font-bold bg-[#00ff88] text-black hover:bg-[#00cc6a] shadow-[0_0_15px_rgba(0,255,136,0.3)] cursor-pointer flex justify-center items-center">
+            {loading ? <Loader className="w-5 h-5 animate-spin" /> : (isLogin ? 'Ingresar' : 'Registrarse')}
           </Button>
         </form>
 

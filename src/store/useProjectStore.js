@@ -9,7 +9,7 @@ export const useProjectStore = create((set, get) => ({
   fetchProjects: async () => {
     set({ isLoading: true, error: null });
     try {
-      const data = await projectService.getAllProjects();
+      const data = await projectService.getProjects();
       set({ projects: data, isLoading: false });
     } catch (error) {
       set({ error: error.message, isLoading: false });

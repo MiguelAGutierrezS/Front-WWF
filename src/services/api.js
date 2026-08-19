@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAnonSessionId } from '../utils/session';
 
 // Base URL — change this if the backend is deployed elsewhere
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://206.81.8.110:8001';
@@ -9,6 +10,60 @@ export const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('wwf_access_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    config.headers['X-Anon-Session-ID'] = getAnonSessionId();
+  }
+  return config;
+}, (error) => Promise.reject(error));
+
+apiClient.interceptors.response.use(
+  (response) => {
+    // Si viene anon session id retornado en las cabeceras
+    const newAnonId = response.headers['x-anon-session-id'];
+    if (newAnonId) {
+      localStorage.setItem('wwf_anon_session_id', newAnonId);
+    }
+
+    // Desempaquetar respuesta unificada
+    if (response.data && response.data.status === 'success') {
+      return response.data;
+    }
+    return response.data;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const refreshToken = localStorage.getItem('wwf_refresh_token');
+        if (!refreshToken) throw new Error('No refresh token available');
+
+        const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {
+          refresh_token: refreshToken,
+        });
+
+        if (data.status === 'success') {
+          const { access_token, refresh_token: newRefresh } = data.data;
+          localStorage.setItem('wwf_access_token', access_token);
+          localStorage.setItem('wwf_refresh_token', newRefresh);
+          
+          originalRequest.headers.Authorization = `Bearer ${access_token}`;
+          return apiClient(originalRequest);
+        }
+      } catch (refreshErr) {
+        localStorage.removeItem('wwf_access_token');
+        localStorage.removeItem('wwf_refresh_token');
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error.response?.data || error);
+  }
+);
 
 // ────────────────────────────────────────────────────────────
 // Reports › Indicators

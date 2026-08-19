@@ -198,61 +198,82 @@ export const ProjectGiantModal = () => {
 
   return (
     <FloatingPanel 
-      className="w-[90%] max-w-6xl max-h-[90vh] mx-auto mt-[5vh] p-4 bg-black/95 backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10 shadow-2xl"
+      className="w-[90%] max-w-[1400px] max-h-[90vh] mx-auto mt-[5vh] p-0 bg-gradient-to-br from-[#0a0f18] to-black backdrop-blur-3xl flex flex-col rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden"
     >
-      <div className="flex justify-between items-start border-b border-white/10 pb-3 mb-3">
-        <div>
+      {/* Premium Header */}
+      <div className="relative bg-gradient-to-r from-blue-900/20 via-[#00ff88]/5 to-transparent border-b border-white/10 p-4 sm:p-5 flex justify-between items-start shrink-0 overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#00ff88]/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="relative z-10">
           <button 
             onClick={handleBack} 
-            className="text-primary hover:text-white mb-1 font-medium text-sm flex items-center cursor-pointer transition-colors"
+            className="group flex items-center gap-2 text-blue-400 hover:text-[#00ff88] mb-2 font-bold text-xs cursor-pointer transition-colors"
           >
-            ← Volver a Resumen
+            <div className="bg-blue-500/10 group-hover:bg-[#00ff88]/20 p-1.5 rounded-full transition-colors">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </div>
+            Volver a Resumen
           </button>
-          <h1 className="text-2xl font-extrabold text-white">{modalData.title}</h1>
-          <p className="text-base text-gray-400 mt-1 max-w-4xl">{modalData.description}</p>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="bg-blue-500/20 text-blue-400 text-[10px] font-black uppercase px-2 py-0.5 rounded-full border border-blue-500/30 tracking-widest shadow-lg">Proyecto Integral</span>
+            <span className="bg-[#00ff88]/20 text-[#00ff88] text-[10px] font-black uppercase px-2 py-0.5 rounded-full border border-[#00ff88]/30 tracking-widest shadow-[0_0_10px_rgba(0,255,136,0.3)]">{modalData.status || 'En curso'}</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-md">{modalData.title}</h1>
+          <p className="text-sm text-gray-400 mt-1 max-w-4xl font-medium leading-relaxed">{modalData.description}</p>
         </div>
-        <div className="flex items-center gap-3">
+        
+        <div className="relative z-10 flex items-center gap-3">
           <button 
             onClick={handleExportCSV} 
-            className="flex items-center gap-2 bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 px-3 py-1.5 rounded-xl transition-colors font-bold cursor-pointer border border-blue-500/30 text-sm"
+            className="flex items-center gap-2 bg-black/50 hover:bg-blue-500/20 text-blue-400 px-4 py-2.5 rounded-xl transition-all duration-300 font-black cursor-pointer border border-blue-500/30 text-sm hover:scale-105 shadow-lg group"
             title="Descargar Datos en CSV"
           >
-            <FileSpreadsheet className="w-4 h-4" />
-            CSV
+            <FileSpreadsheet className="w-5 h-5 group-hover:animate-bounce" />
+            Exportar CSV
           </button>
           <button 
             onClick={handleExportPDF} 
-            className="flex items-center gap-2 bg-green-500/20 hover:bg-green-500/40 text-green-400 px-3 py-1.5 rounded-xl transition-colors font-bold cursor-pointer border border-green-500/30 text-sm"
+            className="flex items-center gap-2 bg-[#00ff88]/10 hover:bg-[#00ff88]/30 text-[#00ff88] px-4 py-2.5 rounded-xl transition-all duration-300 font-black cursor-pointer border border-[#00ff88]/30 text-sm hover:scale-105 shadow-[0_0_15px_rgba(0,255,136,0.2)] group"
             title="Exportar Reporte a PDF"
           >
-            <FileText className="w-4 h-4" />
-            PDF
+            <FileText className="w-5 h-5 group-hover:animate-pulse" />
+            Reporte PDF
           </button>
-          <button onClick={handleCloseEntirely} className="text-white/40 hover:text-white p-2 bg-white/5 rounded-full cursor-pointer transition-colors">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <button onClick={handleCloseEntirely} className="text-gray-500 hover:text-red-400 ml-4 p-2.5 bg-white/5 hover:bg-red-500/10 rounded-full cursor-pointer transition-all duration-300 hover:rotate-90">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
           </button>
         </div>
       </div>
 
-      <div id="giant-report-content" className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-4 pr-3">
+      <div id="giant-report-content" className="flex-1 overflow-y-auto custom-scrollbar flex flex-col xl:flex-row gap-6 p-6 sm:p-8">
           
         {/* Columna Izquierda: Detalles del Proyecto */}
-        <div className="w-full xl:w-1/3 space-y-3 shrink-0">
-          <div className="bg-white/5 p-3 rounded-2xl border border-white/10">
-            <h3 className="text-lg font-bold text-white mb-2">Información Clave</h3>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><strong className="text-white">Investigador Principal:</strong> {investigator?.full_name} ({investigator?.institucion})</li>
-              <li><strong className="text-white">Cámaras Activas:</strong> {projectCameras?.length} unidades</li>
-              <li><strong className="text-white">Avistamientos Totales:</strong> {projectSightings?.length} registros IA</li>
+        <div className="w-full xl:w-1/3 space-y-5 shrink-0">
+          <div className="bg-black/40 p-6 rounded-3xl border border-white/5 shadow-inner">
+            <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4">Información Clave</h3>
+            <ul className="space-y-4">
+              <li className="flex flex-col">
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Investigador Principal</span>
+                <span className="text-base font-bold text-white">{investigator?.full_name} <span className="text-gray-400 font-medium">({investigator?.institucion})</span></span>
+              </li>
+              <li className="flex flex-col">
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Cámaras Activas</span>
+                <span className="text-base font-black text-blue-400">{projectCameras?.length} unidades operativas</span>
+              </li>
+              <li className="flex flex-col">
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Avistamientos Totales</span>
+                <span className="text-base font-black text-[#00ff88]">{projectSightings?.length} registros IA confirmados</span>
+              </li>
             </ul>
           </div>
           
-          <div className="bg-white/5 p-3 rounded-2xl border border-white/10">
-            <h3 className="text-lg font-bold text-white mb-2">Objetivos del Proyecto</h3>
-            <p className="text-sm text-gray-300 leading-relaxed mb-3">
+          <div className="bg-gradient-to-br from-white/5 to-transparent p-6 rounded-3xl border border-white/5 shadow-lg">
+            <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-3">Objetivos del Proyecto</h3>
+            <p className="text-sm text-gray-300 leading-relaxed mb-5">
               {modalData.objectives}
             </p>
-            <h4 className="text-base font-bold text-white mb-1">Resultados Esperados</h4>
+            <h4 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-3">Resultados Esperados</h4>
             <p className="text-sm text-gray-300 leading-relaxed">
               {modalData.expected_results}
             </p>

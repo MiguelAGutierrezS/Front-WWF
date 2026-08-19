@@ -3,8 +3,11 @@ import { FloatingPanel } from '../../components/layout/FloatingPanel';
 import { useModalStore } from '../../store/useModalStore';
 import { useMapStore } from '../../store/useMapStore';
 import { Button } from '../../components/ui/Button';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Camera, LayoutDashboard, ChevronRight, ChevronLeft, Map as MapIcon } from 'lucide-react';
+
 export const ProjectListModal = () => {
-  const { openModal } = useModalStore();
+  const { openModal, closeModal } = useModalStore();
   const setActiveProject = useMapStore((state) => state.setActiveProject);
   const activeProjectId = useMapStore((state) => state.activeProjectId);
   const cameraStations = useMapStore((state) => state.cameraStations);
@@ -24,13 +27,27 @@ export const ProjectListModal = () => {
     <FloatingPanel 
       className={`transition-all duration-300 p-4 ${activeProjectId ? 'w-[500px]' : 'w-[400px]'}`}
     >
-      <div className="space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar pr-2">
-        {!activeProjectId && (
-          <p className="text-base text-gray-300 font-medium sticky top-0 bg-[#0f172a] z-10 py-2">
-            Selecciona un proyecto para localizar sus cámaras trampa:
-          </p>
-        )}
+      {!activeProjectId && (
+        <div className="-mt-4 -mx-4 mb-2 p-5 bg-gradient-to-r from-black/80 to-black/40 border-b border-white/10 shrink-0 flex justify-between items-start rounded-t-2xl">
+          <div>
+            <h3 className="text-base font-black text-[#00ff88] uppercase tracking-widest flex items-center gap-2">
+              <MapIcon className="w-5 h-5" />
+              Tus Proyectos
+            </h3>
+            <p className="text-xs text-gray-400 mt-1 font-medium">
+              Selecciona un proyecto para explorar sus cámaras.
+            </p>
+          </div>
+          <button 
+            onClick={closeModal}
+            className="text-white/40 hover:text-red-400 bg-white/5 hover:bg-red-500/10 p-2 rounded-full transition-colors cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+      )}
 
+      <div className="space-y-4 max-h-[55vh] overflow-y-auto custom-scrollbar pr-2 flex-1">
         {projects.length === 0 && (
           <p className="text-sm text-gray-500 text-center py-8">No hay proyectos registrados.</p>
         )}
@@ -51,38 +68,66 @@ export const ProjectListModal = () => {
               onClick={() => !isActive && handleSelectProject(proj.id)}
               className={`p-4 rounded-xl border transition-all duration-300 ${
                 isActive 
-                  ? 'bg-white/10 border-white/40 cursor-default scale-[1.02] shadow-lg' 
+                  ? 'bg-black/40 border-white/20 cursor-default shadow-lg' 
                   : 'bg-white/5 border-white/10 hover:bg-[#1a1a1a] hover:scale-[1.02] cursor-pointer'
               }`}
             >
-              <h4 className={`${isActive ? 'text-xl' : 'text-lg'} font-bold text-white mb-1 transition-all duration-300`}>{proj.title}</h4>
-              <p className={`${isActive ? 'text-base' : 'text-sm'} text-gray-300 mb-2 transition-all duration-300`}>{proj.description}</p>
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`p-2 rounded-lg ${isActive ? 'bg-[#00ff88]/20 text-[#00ff88]' : 'bg-white/5 text-gray-400'}`}>
+                  <LayoutDashboard className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className={`font-extrabold transition-all duration-300 ${isActive ? 'text-xl text-[#00ff88]' : 'text-lg text-white'}`}>{proj.title}</h4>
+                  {!isActive && (
+                    <div className="text-xs font-bold text-gray-400 flex items-center gap-1 mt-1">
+                      <Camera className="w-3 h-3" />
+                      {projectCameras.length} cámaras
+                    </div>
+                  )}
+                </div>
+              </div>
               
-              {!isActive && (
-                <div className="text-sm text-primary font-semibold">
-                  {projectCameras.length} cámaras
-                </div>
-              )}
-
-              {isActive && (
-                <div className="mt-4 animate-in fade-in duration-300">
-                  <h5 className="font-bold text-white/90 mb-2 text-lg">Puntos Relevantes:</h5>
-                  <ul className="list-disc pl-5 space-y-2 text-base text-gray-400 mb-6">
-                    <li><strong className="text-white/80">Cámaras Instaladas:</strong> {projectCameras.length} unidades</li>
-                    <li><strong className="text-white/80">Estado:</strong> {proj.status}</li>
-                    <li><strong className="text-white/80">Investigador Principal:</strong> {investigator?.full_name || 'No asignado'}</li>
-                  </ul>
-                  
-                  <div className="flex gap-3 mb-4">
-                    <Button variant="secondary" onClick={() => handleSelectProject(proj.id)} className="flex-1 cursor-pointer py-2 text-base transition-all duration-300 hover:scale-105 hover:bg-white/10">
-                      Atrás
-                    </Button>
-                    <Button variant="primary" onClick={() => handleViewMore(proj)} className="flex-1 cursor-pointer py-2 bg-white hover:bg-gray-200 text-black text-base font-bold shadow-lg transition-all duration-300 hover:scale-105">
-                      Ver reporte completo
-                    </Button>
-                  </div>
-                </div>
-              )}
+              <p className={`text-gray-400 transition-all duration-300 ${isActive ? 'text-sm mt-3 mb-4' : 'text-xs line-clamp-2'}`}>{proj.description}</p>
+              
+              <AnimatePresence initial={false}>
+                {isActive && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-2 border-t border-white/10 mt-2">
+                      <div className="grid grid-cols-2 gap-2 mb-5">
+                        <div className="bg-black/40 rounded-xl p-3 border border-white/5 shadow-inner">
+                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Cámaras Instaladas</p>
+                          <p className="text-xl font-black text-white">{projectCameras.length}</p>
+                        </div>
+                        <div className="bg-black/40 rounded-xl p-3 border border-white/5 shadow-inner">
+                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Estado</p>
+                          <p className="text-sm font-bold text-blue-400">{proj.status}</p>
+                        </div>
+                        <div className="col-span-2 bg-black/40 rounded-xl p-3 border border-white/5 shadow-inner">
+                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Investigador Principal</p>
+                          <p className="text-sm font-bold text-white/90">{investigator?.full_name || 'No asignado'}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-3">
+                        <Button variant="secondary" onClick={(e) => { e.stopPropagation(); handleSelectProject(proj.id); }} className="flex-1 cursor-pointer py-3 text-sm font-bold bg-white/5 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] flex justify-center items-center gap-2">
+                          <ChevronLeft className="w-4 h-4" />
+                          Atrás
+                        </Button>
+                        <Button variant="primary" onClick={(e) => { e.stopPropagation(); handleViewMore(proj); }} className="flex-[2] cursor-pointer py-3 bg-[#00ff88] hover:bg-green-400 text-black text-sm font-extrabold shadow-[0_0_15px_rgba(0,255,136,0.3)] transition-all duration-300 hover:scale-[1.02] flex justify-center items-center gap-2">
+                          Panel Completo
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}

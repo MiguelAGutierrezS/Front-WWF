@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Camera, Map as MapIcon, X } from 'lucide-react';
 import { useModalStore } from '../../store/useModalStore';
 
 export const CreationFAB = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModalStore();
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleAction = (modalName) => {
     setIsOpen(false);
@@ -12,7 +27,7 @@ export const CreationFAB = () => {
   };
 
   return (
-    <div className="absolute bottom-8 right-8 z-40 flex flex-col items-end pointer-events-auto">
+    <div ref={containerRef} className="absolute bottom-8 right-8 z-40 flex flex-col items-end pointer-events-auto">
       
       {/* Menu desplegable */}
       <div 

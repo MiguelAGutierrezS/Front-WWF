@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '../layout/FloatingPanel';
 
 export const Button = ({ children, variant = 'primary', className, ...props }) => {
-  const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 disabled:opacity-50 disabled:pointer-events-none px-4 py-2 text-sm";
+  const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95 disabled:opacity-50 disabled:pointer-events-none px-4 py-2 text-sm cursor-pointer";
   
   const variants = {
     primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20",
