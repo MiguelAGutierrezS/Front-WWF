@@ -5,6 +5,7 @@ import { ArrowLeft, Loader } from 'lucide-react';
 import { authService } from '../services/authService';
 import { userService } from '../services/userService';
 import { useAuthStore } from '../store/useAuthStore';
+import { UserGender, UserGenderLabels } from '../constants/enums';
 
 export const AuthLayout = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export const AuthLayout = () => {
     email: '',
     password: '',
     institucion: '',
-    sexo: 'O'
+    sexo: UserGender.MALE
   });
 
   const handleChange = (e) => {
@@ -92,18 +93,33 @@ export const AuthLayout = () => {
           )}
 
           {!isLogin && (
-            <div>
-              <label className="block text-white/70 text-xs font-semibold mb-1 uppercase tracking-wider">Nombre Completo</label>
-              <input 
-                type="text" 
-                name="full_name"
-                value={formData.full_name}
-                onChange={handleChange}
-                required
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-text"
-                placeholder="Ej. Jane Goodall"
-              />
-            </div>
+            <>
+              <div>
+                <label className="block text-white/70 text-xs font-semibold mb-1 uppercase tracking-wider">Nombre Completo</label>
+                <input 
+                  type="text" 
+                  name="full_name"
+                  value={formData.full_name}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-text"
+                  placeholder="Ej. Jane Goodall"
+                />
+              </div>
+
+              <div>
+                <label className="block text-white/70 text-xs font-semibold mb-1 uppercase tracking-wider">Sexo / Género</label>
+                <select 
+                  name="sexo"
+                  value={formData.sexo}
+                  onChange={handleChange}
+                  className="w-full bg-[#111827] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer appearance-none"
+                >
+                  <option value={UserGender.MALE}>{UserGenderLabels[UserGender.MALE]}</option>
+                  <option value={UserGender.FEMALE}>{UserGenderLabels[UserGender.FEMALE]}</option>
+                </select>
+              </div>
+            </>
           )}
           
           <div>

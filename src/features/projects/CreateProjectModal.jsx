@@ -4,6 +4,7 @@ import { useModalStore } from '../../store/useModalStore';
 import { useUserStore } from '../../store/useUserStore';
 import { useProjectStore } from '../../store/useProjectStore';
 import { Map as MapIcon, Save } from 'lucide-react';
+import { ProjectStatus, ProjectStatusLabels } from '../../constants/enums';
 
 export const CreateProjectModal = () => {
   const { closeModal } = useModalStore();
@@ -18,7 +19,7 @@ export const CreateProjectModal = () => {
     description: '',
     objectives: '',
     expected_results: '',
-    status: 'public',
+    status: ProjectStatus.PUBLIC,
     colaborators: []
   });
 
@@ -141,8 +142,8 @@ export const CreateProjectModal = () => {
                 onChange={handleChange}
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500 transition-all focus:bg-white/10 cursor-pointer shadow-inner appearance-none"
               >
-                <option value="public" className="bg-[#0f172a] text-white">Público (Compartir datos anonimizados)</option>
-                <option value="private" className="bg-[#0f172a] text-white">Privado (Solo investigadores autorizados)</option>
+                <option value={ProjectStatus.PUBLIC} className="bg-[#0f172a] text-white">{ProjectStatusLabels[ProjectStatus.PUBLIC]}</option>
+                <option value={ProjectStatus.PRIVATE} className="bg-[#0f172a] text-white">{ProjectStatusLabels[ProjectStatus.PRIVATE]}</option>
               </select>
             </div>
           </div>

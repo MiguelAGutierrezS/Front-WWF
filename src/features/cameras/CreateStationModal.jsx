@@ -4,6 +4,7 @@ import { useModalStore } from '../../store/useModalStore';
 import { Camera, Save, Video } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
 import { useProjectStore } from '../../store/useProjectStore';
+import { CameraStationStatus } from '../../constants/enums';
 
 export const CreateStationModal = () => {
   const { closeModal } = useModalStore();
@@ -23,7 +24,7 @@ export const CreateStationModal = () => {
     serial_number: '',
     days_active: '',
     deployment_date: '',
-    status: 'active',
+    status: CameraStationStatus.ACTIVE,
     retrieval_date: ''
   });
 
@@ -201,19 +202,19 @@ export const CreateStationModal = () => {
               <div className="flex-1">
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Estado *</label>
                 <div className="flex bg-black/60 rounded-xl p-1 relative border border-white/10 cursor-pointer w-full h-[58px]">
-                  <div className={`absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-[#1e293b] border border-white/10 rounded-lg transition-transform duration-300 shadow-md ${formData.status === 'retrieved' ? 'translate-x-full' : 'translate-x-0'}`}></div>
+                  <div className={`absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-[#1e293b] border border-white/10 rounded-lg transition-transform duration-300 shadow-md ${formData.status === CameraStationStatus.RETRIEVED ? 'translate-x-full' : 'translate-x-0'}`}></div>
                   
-                  <button type="button" onClick={() => setFormData({...formData, status: 'active', retrieval_date: ''})} className={`flex-1 flex items-center justify-center gap-2 text-sm font-bold z-10 transition-colors h-full ${formData.status === 'active' ? 'text-[#00ff88]' : 'text-gray-500 hover:text-white'}`}>
+                  <button type="button" onClick={() => setFormData({...formData, status: CameraStationStatus.ACTIVE, retrieval_date: ''})} className={`flex-1 flex items-center justify-center gap-2 text-sm font-bold z-10 transition-colors h-full ${formData.status === CameraStationStatus.ACTIVE ? 'text-[#00ff88]' : 'text-gray-500 hover:text-white'}`}>
                     <span className="w-2 h-2 rounded-full bg-[#00ff88] shadow-[0_0_8px_rgba(0,255,136,0.8)]"></span> Activa
                   </button>
                   
-                  <button type="button" onClick={() => setFormData({...formData, status: 'retrieved'})} className={`flex-1 flex items-center justify-center gap-2 text-sm font-bold z-10 transition-colors h-full ${formData.status === 'retrieved' ? 'text-red-400' : 'text-gray-500 hover:text-white'}`}>
+                  <button type="button" onClick={() => setFormData({...formData, status: CameraStationStatus.RETRIEVED})} className={`flex-1 flex items-center justify-center gap-2 text-sm font-bold z-10 transition-colors h-full ${formData.status === CameraStationStatus.RETRIEVED ? 'text-red-400' : 'text-gray-500 hover:text-white'}`}>
                     <span className="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.8)]"></span> Retirada
                   </button>
                 </div>
               </div>
               
-              {formData.status === 'retrieved' && (
+              {formData.status === CameraStationStatus.RETRIEVED && (
                 <div className="flex-1">
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Fecha Retiro *</label>
                   <input 

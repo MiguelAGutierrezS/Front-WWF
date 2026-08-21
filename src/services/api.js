@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getAnonSessionId } from '../utils/session';
+import { ResponseStatus } from '../constants/enums';
 
 // Base URL — change this if the backend is deployed elsewhere
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://206.81.8.110:8001';
@@ -30,7 +31,7 @@ apiClient.interceptors.response.use(
     }
 
     // Desempaquetar respuesta unificada
-    if (response.data && response.data.status === 'success') {
+    if (response.data && response.data.status === ResponseStatus.SUCCESS) {
       return response.data;
     }
     return response.data;
