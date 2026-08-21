@@ -13,12 +13,9 @@ Actualizar `src/features/cameras/CreateStationModal.jsx` para dar soporte a todo
 #### Campos Obligatorios:
 - `station_code` (String): Código único de la cámara trampa (ej. "CAM-01").
 - `location_name` (String): Nombre de la ubicación (ej. "Quebrada La Vieja").
-- `latitude` (Float): Coordenada latitud.
-- `longitude` (Float): Coordenada longitud.
 
 #### Campos Opcionales y Condicionales:
-- `altitude_meters` (Float, opcional).
-- `camera_brand` (String, opcional).
+- `camera_brand` (String, opcional). 
 - `camera_model` (String, opcional).
 - `serial_number` (String, opcional).
 - `days_active` (Number, opcional): Días transcurridos en campo.

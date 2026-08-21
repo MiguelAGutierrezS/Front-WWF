@@ -79,25 +79,25 @@ const generateMockData = () => {
   };
 
   const animalTypes = [
-    { name: 'Jaguar', weight: 15 },
-    { name: 'Puma', weight: 20 },
-    { name: 'Capibara', weight: 35 },
-    { name: 'Tapir', weight: 15 },
-    { name: 'Oso Hormiguero', weight: 10 },
-    { name: 'Ocelote', weight: 8 },
-    { name: 'Oso Andino', weight: 3 },
-    { name: 'Mono Araña', weight: 12 },
-    { name: 'Pecarí', weight: 25 }
+    { name: 'Jaguar', weight: 15, family: 'Felidae', genus: 'Panthera' },
+    { name: 'Puma', weight: 20, family: 'Felidae', genus: 'Puma' },
+    { name: 'Capibara', weight: 35, family: 'Caviidae', genus: 'Hydrochoerus' },
+    { name: 'Tapir', weight: 15, family: 'Tapiridae', genus: 'Tapirus' },
+    { name: 'Oso Hormiguero', weight: 10, family: 'Myrmecophagidae', genus: 'Myrmecophaga' },
+    { name: 'Ocelote', weight: 8, family: 'Felidae', genus: 'Leopardus' },
+    { name: 'Oso Andino', weight: 3, family: 'Ursidae', genus: 'Tremarctos' },
+    { name: 'Mono Araña', weight: 12, family: 'Atelidae', genus: 'Ateles' },
+    { name: 'Pecarí', weight: 25, family: 'Tayassuidae', genus: 'Pecari' }
   ];
 
   const getRandomAnimal = () => {
     const totalWeight = animalTypes.reduce((acc, curr) => acc + curr.weight, 0);
     let randomNum = Math.random() * totalWeight;
     for (let animal of animalTypes) {
-      if (randomNum < animal.weight) return animal.name;
+      if (randomNum < animal.weight) return animal;
       randomNum -= animal.weight;
     }
-    return 'Animal Desconocido';
+    return { name: 'Animal Desconocido', family: 'Desconocido', genus: 'Desconocido' };
   };
 
   // Generar Estaciones
@@ -109,6 +109,14 @@ const generateMockData = () => {
       const latOffset = (Math.random() - 0.5) * 0.15;
       const lngOffset = (Math.random() - 0.5) * 0.15;
       
+      const deploymentDate = new Date(2025, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
+      const isRetrieved = Math.random() > 0.7; // 30% chance to be retrieved
+      
+      let retrievalDate = null;
+      if (isRetrieved) {
+        retrievalDate = new Date(deploymentDate.getTime() + (Math.floor(Math.random() * 60) + 10) * 24 * 60 * 60 * 1000);
+      }
+
       camera_stations.push({
         id: stId,
         project_id: projId,
@@ -118,7 +126,9 @@ const generateMockData = () => {
         longitude: center.lng + lngOffset,
         camera_brand: Math.random() > 0.5 ? 'Browning' : 'Bushnell',
         camera_model: 'Recon Force 4K',
-        status: 'active'
+        status: isRetrieved ? 'retrieved' : 'active',
+        deployment_date: deploymentDate.toISOString().split('T')[0],
+        ...(isRetrieved && { retrieval_date: retrievalDate.toISOString().split('T')[0] })
       });
 
       const numSightings = Math.floor(Math.random() * 19) + 2;
@@ -131,11 +141,14 @@ const generateMockData = () => {
         else if (hour >= 14 && hour < 20) periodo = 'Tarde';
         
         const temperatura = Math.floor(Math.random() * 26) + 15; // 15 to 40
+        const animalData = getRandomAnimal();
         
         species.push({
           id: uuid(`sp${speciesCounter}`),
           station_id: stId,
-          common_name: getRandomAnimal(),
+          common_name: animalData.name,
+          family: animalData.family,
+          genus: animalData.genus,
           confidence_score: (Math.random() * 0.2 + 0.8).toFixed(2), // 80% to 100%
           detection_timestamp: date.toISOString(),
           periodo: periodo,
