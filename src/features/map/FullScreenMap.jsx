@@ -16,15 +16,29 @@ const MapController = () => {
 
   useEffect(() => {
     if (map && activeProjectId && effectiveStations.length > 0) {
-      // Filtrar las cámaras de este proyecto para calcular el centro
-      const projectCameras = effectiveStations.filter(c => c.project_id === activeProjectId);
+      // Filtrar las cámaras con coordenadas válidas de este proyecto para calcular el centro
+      const projectCameras = effectiveStations.filter(c => {
+        if (c.project_id !== activeProjectId) return false;
+        const lat = typeof c.latitude === 'number' ? c.latitude : parseFloat(c.latitude ?? c.lat);
+        const lng = typeof c.longitude === 'number' ? c.longitude : parseFloat(c.longitude ?? c.lng);
+        return !isNaN(lat) && !isNaN(lng);
+      });
       
       if (projectCameras.length > 0) {
-        const avgLat = projectCameras.reduce((acc, c) => acc + c.latitude, 0) / projectCameras.length;
-        const avgLng = projectCameras.reduce((acc, c) => acc + c.longitude, 0) / projectCameras.length;
+        const avgLat = projectCameras.reduce((acc, c) => {
+          const lat = typeof c.latitude === 'number' ? c.latitude : parseFloat(c.latitude ?? c.lat);
+          return acc + lat;
+        }, 0) / projectCameras.length;
+
+        const avgLng = projectCameras.reduce((acc, c) => {
+          const lng = typeof c.longitude === 'number' ? c.longitude : parseFloat(c.longitude ?? c.lng);
+          return acc + lng;
+        }, 0) / projectCameras.length;
         
-        map.panTo({ lat: avgLat, lng: avgLng });
-        map.setZoom(12);
+        if (!isNaN(avgLat) && !isNaN(avgLng)) {
+          map.panTo({ lat: avgLat, lng: avgLng });
+          map.setZoom(12);
+        }
       }
     }
   }, [map, activeProjectId, effectiveStations]);
@@ -60,11 +74,15 @@ export const FullScreenMap = () => {
         ]);
         
         if (camsData && Array.isArray(camsData) && camsData.length > 0) {
-          const parsedCams = camsData.map(s => ({
-            ...s,
-            latitude: parseFloat(s.latitude),
-            longitude: parseFloat(s.longitude)
-          }));
+          const parsedCams = camsData.map(s => {
+            const lat = parseFloat(s.latitude ?? s.lat);
+            const lng = parseFloat(s.longitude ?? s.lng);
+            return {
+              ...s,
+              latitude: !isNaN(lat) ? lat : null,
+              longitude: !isNaN(lng) ? lng : null
+            };
+          });
           setCameraStations(parsedCams);
         }
         
@@ -164,6 +182,14 @@ export const FullScreenMap = () => {
           <AreaActionPopup />
           
           {filteredStations.map((cam) => {
+            const lat = typeof cam.latitude === 'number' ? cam.latitude : parseFloat(cam.latitude ?? cam.lat);
+            const lng = typeof cam.longitude === 'number' ? cam.longitude : parseFloat(cam.longitude ?? cam.lng);
+
+            // Validar estrictamente que lat y lng sean números finitos válidos
+            if (lat === null || lng === null || isNaN(lat) || isNaN(lng)) {
+              return null;
+            }
+
             const isHighlightProject = activeProjectId === cam.project_id;
             const isCaptured = selectedCameraIds.includes(cam.id);
             
@@ -185,7 +211,7 @@ export const FullScreenMap = () => {
             return (
               <AdvancedMarker 
                 key={cam.id} 
-                position={{ lat: cam.latitude, lng: cam.longitude }}
+                position={{ lat, lng }}
                 onClick={() => openModal('cameraData', cam)}
                 className="cursor-pointer"
                 zIndex={isCaptured ? 100 : 1}
